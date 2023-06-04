@@ -2,7 +2,6 @@ import { Plane } from '@react-three/drei';
 import { CuboidCollider, RigidBody } from '@react-three/rapier';
 import React from 'react';
 import { RepeatWrapping, TextureLoader } from 'three';
-import grass from '../../../assets/textures/grass.jpg';
 
 interface GroundInterface {
   size: {
@@ -12,7 +11,9 @@ interface GroundInterface {
 }
 
 export const Ground: React.FC<GroundInterface> = ({ size }) => {
-  const texture = new TextureLoader().load(grass);
+  const grassUrl: string = '../../../assets/textures/grass.jpg';
+  const texture = new TextureLoader().load(grassUrl);
+
   texture.wrapS = RepeatWrapping;
   texture.wrapT = RepeatWrapping;
   texture.repeat.set(240, 240);

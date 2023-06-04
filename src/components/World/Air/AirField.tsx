@@ -1,7 +1,7 @@
 import { useGLTF } from '@react-three/drei';
 import React from 'react';
 import { Vector3 } from 'three';
-import { getRandomInt } from '../../../utils/utils.ts';
+import { getRandomInt } from '../../../utils/utils';
 import { Cake } from '../../Objects/Cake/Cake';
 import { Plate } from '../../Objects/Plate/Plate';
 
@@ -26,7 +26,7 @@ const AirField: React.FC = () => {
     <>
       {[
         array.map((item, index) => (
-          <group>
+          <group key={`item${index}`}>
             <Plate ind={index} position={item} model={plateModel} />
             <Cake
               ind={index}

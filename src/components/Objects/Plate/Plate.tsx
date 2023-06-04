@@ -1,9 +1,10 @@
-import React from 'react';
 import { RigidBody } from '@react-three/rapier';
+import React from 'react';
 import { GLTF } from 'three-stdlib';
+import { Vector3 } from '../../../../three-types';
 
 interface PlateInterface {
-  position: object;
+  position: Vector3;
   ind: number;
   model: GLTF;
 }
