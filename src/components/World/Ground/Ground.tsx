@@ -11,7 +11,7 @@ interface GroundInterface {
 }
 
 export const Ground: React.FC<GroundInterface> = ({ size }) => {
-  const grassUrl: string = '../../../assets/textures/grass.jpg';
+  const grassUrl: string = './assets/textures/grass.jpg';
   const texture = new TextureLoader().load(grassUrl);
 
   texture.wrapS = RepeatWrapping;
