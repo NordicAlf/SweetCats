@@ -42,11 +42,13 @@ export const Player = () => {
       0,
       Number(controls.backward) / 100 - Number(controls.forward) / 100
     );
+
     sideVector.set(
       Number(controls.left) / 100 - Number(controls.right) / 100,
       0,
       0
     );
+
     direction
       .subVectors(frontVector, sideVector)
       .normalize()
@@ -62,12 +64,14 @@ export const Player = () => {
       new Ray(ref.current.translation(), { x: 0, y: -1, z: 0 })
     );
     const grounded = ray && ray.collider && Math.abs(ray.toi) < 0.6;
+
     if (controls.jump && grounded) {
       ref.current.setLinvel(jumpVector);
     }
 
     // update camera
     const translation = ref.current.translation();
+
     state.camera.position.set(
       translation.x,
       translation.y + ViewHeightAbovePlayer,

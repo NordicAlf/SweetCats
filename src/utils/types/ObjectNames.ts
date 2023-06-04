@@ -1,4 +1,4 @@
 export default {
-    player: 'Player',
-    cake: 'Cake'
-}
+  player: 'Player',
+  cake: 'Cake',
+};
