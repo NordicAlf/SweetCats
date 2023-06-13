@@ -4,8 +4,8 @@ import { useFrame, useThree } from '@react-three/fiber';
 import { CapsuleCollider, RigidBody, useRapier } from '@react-three/rapier';
 import React, { useRef } from 'react';
 import { Vector3 } from 'three';
-import ObjectNames from '../../utils/types/ObjectNames';
-import Settings from '../../utils/types/Settings';
+import ObjectNames from '../../utils/constants/ObjectNames';
+import Settings from '../../utils/constants/Settings';
 import { Cat } from './Model/Cat';
 
 const ViewHeightAbovePlayer = 0.02;
@@ -88,7 +88,7 @@ export const Player = () => {
         scale={[3, 3, 3]}
         enabledRotations={[false, false, false]}
         mass={1}
-        position={[0, 8, 0]}
+        position={[0, 1, 0]}
         canSleep={false}
         name={ObjectNames.player}
       >
