@@ -1,17 +1,14 @@
 import { useGLTF } from '@react-three/drei';
 import { RigidBody } from '@react-three/rapier';
 import React, { useState } from 'react';
-import { Mesh, Vector3 } from 'three';
-import ObjectNames from '../../../utils/types/ObjectNames';
+import useBurbleStore from '../../../store/BurbleStore';
+import ObjectNames from '../../../utils/constants/ObjectNames';
+import { Burble } from '../Burble/Burble';
+import { ObjectInterface } from '../ObjectInterface';
 
-interface CakeInterface {
-  position: Vector3;
-  ind: number;
-  mesh: Mesh;
-}
-
-export const Cake: React.FC<CakeInterface> = (props: CakeInterface) => {
+export const Cake = (props: ObjectInterface) => {
   const [isVisible, setVisible] = useState(true);
+  const burbles = useBurbleStore((burbleStore) => burbleStore.burbles);
 
   props.position.setY(props.position.y + 0.05);
 
@@ -19,7 +16,7 @@ export const Cake: React.FC<CakeInterface> = (props: CakeInterface) => {
     <RigidBody
       type={'fixed'}
       position={props.position}
-      key={props.ind}
+      key={props.index}
       onCollisionEnter={() => {
         setVisible(false);
       }}
@@ -33,7 +30,16 @@ export const Cake: React.FC<CakeInterface> = (props: CakeInterface) => {
         scale={0.01}
       />
     </RigidBody>
-  ) : null;
+  ) : (
+    burbles.map((value, index) => (
+      <Burble
+        key={ObjectNames.burble + '_' + index}
+        position={props.position}
+        index={index}
+        isVisible={!isVisible}
+      />
+    ))
+  );
 };
 
 useGLTF.preload('/Models/plate.glb');

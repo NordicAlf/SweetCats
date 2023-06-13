@@ -1,42 +1,35 @@
 import { useGLTF } from '@react-three/drei';
 import React from 'react';
-import { Vector3 } from 'three';
-import { getRandomInt } from '../../../utils/utils';
+import usePlateStore from '../../../store/PlateStore';
+import ObjectNames from '../../../utils/constants/ObjectNames';
+import { getRandomInt } from '../../../utils/functions/randomNumberGenerator';
 import { Cake } from '../../Objects/Cake/Cake';
 import { Plate } from '../../Objects/Plate/Plate';
 
 const AirField: React.FC = () => {
   const plateModel = useGLTF('/Models/plate.glb');
   const cakeModel = useGLTF('/Models/cake1.glb');
-  const array = [];
-  const minWorld = -50 / 2;
-  const maxWorld = 50 / 2;
-
-  for (let i = 0; i < 1000; i++) {
-    array.push(
-      new Vector3(
-        getRandomInt(minWorld, maxWorld),
-        getRandomInt(0, maxWorld),
-        getRandomInt(minWorld, maxWorld)
-      )
-    );
-  }
+  const positions = usePlateStore((state) => state.positions);
 
   return (
-    <>
-      {[
-        array.map((item, index) => (
-          <group key={`item${index}`}>
-            <Plate ind={index} position={item} model={plateModel} />
-            <Cake
-              ind={index}
-              position={item}
-              mesh={cakeModel.scenes[0].children[getRandomInt(0, 12)]}
-            />
-          </group>
-        )),
-      ]}
-    </>
+    <group>
+      <Plate
+        key={666}
+        positions={positions}
+        model={plateModel}
+        countInstances={positions.length}
+      />
+      {positions.map((item, index) => (
+        <Cake
+          key={ObjectNames.cake + '_' + index}
+          index={index}
+          position={item}
+          mesh={cakeModel.scenes[0].children[getRandomInt(0, 12)]}
+          count={positions.length}
+          isVisible={true}
+        />
+      ))}
+    </group>
   );
 };
 
