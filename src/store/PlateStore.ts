@@ -13,7 +13,7 @@ const createPositions = (): Vector3[] => {
     array.push(
       new Vector3(
         getRandomInt(minWorld, maxWorld),
-        getRandomInt(0, maxWorld),
+        getRandomInt(6, maxWorld),
         getRandomInt(minWorld, maxWorld)
       )
     );

@@ -10,7 +10,7 @@ interface ModelInterface {
 
 export const Cat: React.FC<ModelInterface> = (props: ModelInterface) => {
   const group = useRef();
-  const { nodes, materials } = useGLTF('/Models/cat.glb');
+  const { nodes, materials } = useGLTF('/assets/models/cat.glb');
 
   useFrame((state) => {
     group.current.rotation.set(0, state.camera.rotation.y - 1.75, 0);
@@ -71,4 +71,4 @@ export const Cat: React.FC<ModelInterface> = (props: ModelInterface) => {
   );
 };
 
-useGLTF.preload('/Models/cat.glb');
+useGLTF.preload('/assets/models/cat.glb');

@@ -1,10 +1,10 @@
 import { useGLTF } from '@react-three/drei';
 import { RigidBody } from '@react-three/rapier';
 import React, { useState } from 'react';
-import useBurbleStore from '../../../store/BurbleStore';
-import ObjectNames from '../../../utils/constants/ObjectNames';
-import { Burble } from '../Burble/Burble';
-import { ObjectInterface } from '../ObjectInterface';
+import useBurbleStore from '../../store/BurbleStore';
+import ObjectNames from '../../utils/constants/ObjectNames';
+import { Burble } from './Burble';
+import { ObjectInterface } from './Interface/ObjectInterface';
 
 export const Cake = (props: ObjectInterface) => {
   const [isVisible, setVisible] = useState(true);
@@ -21,12 +21,12 @@ export const Cake = (props: ObjectInterface) => {
         setVisible(false);
       }}
       name={ObjectNames.cake}
-      scale={1.5}
+      scale={2}
     >
       <mesh
-        geometry={props.mesh.geometry}
-        material={props.mesh.material}
-        position={props.mesh.position}
+        geometry={props.mesh?.geometry}
+        material={props.mesh?.material}
+        position={props.mesh?.position}
         scale={0.01}
       />
     </RigidBody>
@@ -42,4 +42,4 @@ export const Cake = (props: ObjectInterface) => {
   );
 };
 
-useGLTF.preload('/Models/plate.glb');
+useGLTF.preload('/assets/models/plate.glb');

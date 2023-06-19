@@ -1,14 +1,14 @@
 import { useGLTF } from '@react-three/drei';
 import React from 'react';
-import usePlateStore from '../../../store/PlateStore';
-import ObjectNames from '../../../utils/constants/ObjectNames';
-import { getRandomInt } from '../../../utils/functions/randomNumberGenerator';
-import { Cake } from '../../Objects/Cake/Cake';
-import { Plate } from '../../Objects/Plate/Plate';
+import usePlateStore from '../../../../store/PlateStore';
+import ObjectNames from '../../../../utils/constants/ObjectNames';
+import { getRandomInt } from '../../../../utils/functions/randomNumberGenerator';
+import { Cake } from '../../../Objects/Cake';
+import { Plate } from '../../../Objects/Plate';
 
-const AirField: React.FC = () => {
-  const plateModel = useGLTF('/Models/plate.glb');
-  const cakeModel = useGLTF('/Models/cake1.glb');
+const Plates: React.FC = () => {
+  const plateModel = useGLTF('/assets/models/plate.glb');
+  const cakeModel = useGLTF('/assets/models/cake.glb');
   const positions = usePlateStore((state) => state.positions);
 
   return (
@@ -33,7 +33,7 @@ const AirField: React.FC = () => {
   );
 };
 
-useGLTF.preload('/Models/plate.glb');
-useGLTF.preload('/Models/cake1.glb');
+useGLTF.preload('/assets/models/plate.glb');
+useGLTF.preload('/assets/models/cake.glb');
 
-export default AirField;
+export default Plates;
