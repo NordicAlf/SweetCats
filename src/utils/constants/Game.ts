@@ -1,7 +1,7 @@
 export default {
   minWorldPosition: -50,
-  maxWorldPosition: 50,
+  maxWorldPosition: 70,
 
-  countPlates: 300,
-  countBurbles: 100,
+  countPlates: 250,
+  countBurbles: 50,
 };

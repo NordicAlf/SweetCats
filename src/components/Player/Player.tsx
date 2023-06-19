@@ -1,29 +1,27 @@
 import { Ray } from '@dimforge/rapier3d-compat';
 import { useKeyboardControls } from '@react-three/drei';
 import { useFrame, useThree } from '@react-three/fiber';
-import { CapsuleCollider, RigidBody, useRapier } from '@react-three/rapier';
-import React, { useRef } from 'react';
+import {
+  CapsuleCollider,
+  RapierRigidBody,
+  RigidBody,
+  useRapier,
+} from '@react-three/rapier';
+import React, { useRef, useState } from 'react';
 import { Vector3 } from 'three';
 import ObjectNames from '../../utils/constants/ObjectNames';
 import Settings from '../../utils/constants/Settings';
-import { Cat } from './Model/Cat';
+import { Cat } from '../Objects/Cat';
+import { ControlsInterface } from './Interface/ControlsInterface';
 
 const ViewHeightAbovePlayer = 0.02;
 
-interface ControlInterface {
-  forward: boolean;
-  backward: boolean;
-  left: boolean;
-  right: boolean;
-  jump: boolean;
-  run: boolean;
-}
-
 export const Player = () => {
-  const ref = useRef();
+  const ref = useRef<RapierRigidBody>(null);
   const [, getKeys] = useKeyboardControls();
   const { camera } = useThree();
   const rapier = useRapier();
+  const [isFlyMode, setFlyMode] = useState(false);
 
   const direction = new Vector3();
   const frontVector = new Vector3();
@@ -33,7 +31,7 @@ export const Player = () => {
   camera.rotation.order = 'YXZ';
 
   useFrame((state) => {
-    const controls: ControlInterface = getKeys();
+    const controls: ControlsInterface = getKeys();
     const velocity = ref.current.linvel();
 
     // movement
@@ -65,18 +63,36 @@ export const Player = () => {
     );
     const grounded = ray && ray.collider && Math.abs(ray.toi) < 0.6;
 
-    if (controls.jump && grounded) {
+    if (controls.jump && grounded && !isFlyMode) {
       ref.current.setLinvel(jumpVector);
     }
 
     // update camera
     const translation = ref.current.translation();
 
-    state.camera.position.set(
-      translation.x,
-      translation.y + ViewHeightAbovePlayer,
-      translation.z
-    );
+    if (controls.flyMode && import.meta.env.DEV) {
+      setFlyMode(true);
+    }
+
+    if (isFlyMode) {
+      jumpVector.set(
+        0,
+        Number(controls.jump) - Number(controls.flyModeDown),
+        0
+      );
+
+      state.camera.position.set(
+        state.camera.position.x + direction.x,
+        state.camera.position.y + jumpVector.y,
+        state.camera.position.z + direction.z
+      );
+    } else {
+      state.camera.position.set(
+        translation.x,
+        translation.y + ViewHeightAbovePlayer,
+        translation.z
+      );
+    }
   });
 
   return (
@@ -88,7 +104,7 @@ export const Player = () => {
         scale={[3, 3, 3]}
         enabledRotations={[false, false, false]}
         mass={1}
-        position={[0, 1, 0]}
+        position={[25, 1, 0]}
         canSleep={false}
         name={ObjectNames.player}
       >

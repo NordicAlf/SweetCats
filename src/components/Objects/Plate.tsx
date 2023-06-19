@@ -3,8 +3,8 @@ import {
   InstancedRigidBodyProps,
 } from '@react-three/rapier';
 import React, { useMemo } from 'react';
-import ObjectNames from '../../../utils/constants/ObjectNames';
-import { ObjectInstanceInterface } from '../ObjectInterface';
+import ObjectNames from '../../utils/constants/ObjectNames';
+import { ObjectInstanceInterface } from './Interface/ObjectInterface';
 
 export const Plate: React.FC<ObjectInstanceInterface> = (props) => {
   const cubes = useMemo(() => {
@@ -15,7 +15,7 @@ export const Plate: React.FC<ObjectInstanceInterface> = (props) => {
         key: i,
         position: props.positions[i],
         rotation: [-Math.PI / 2, 0, 0],
-        scale: [0.5, 0.5, 0.5],
+        scale: [0.8, 0.8, 0.8],
         name: ObjectNames.plate + '_' + i,
       });
     }
