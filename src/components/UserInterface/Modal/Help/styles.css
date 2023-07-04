@@ -1,0 +1,10 @@
+@import "src/components/UserInterface/Modal/abstractStyles.css";
+
+.modal-help h1 {
+    color: #ffffff;
+}
+
+.modal-help p {
+    color: #ffffff;
+    font-size: 24px;
+}

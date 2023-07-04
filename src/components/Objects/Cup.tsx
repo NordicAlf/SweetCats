@@ -1,11 +1,13 @@
 import { useGLTF } from '@react-three/drei';
 import { RigidBody } from '@react-three/rapier';
 import React from 'react';
-import { GLTFResult } from '../../utils/types/GLTFResult';
+import { GLTFResultType } from '../../utils/types/GLTFResultType';
 import { ObjectInterface } from './Interface/ObjectInterface';
 
 const Cup: React.FC<ObjectInterface> = (props) => {
-  const { nodes, materials } = useGLTF('/assets/models/cup.gltf') as GLTFResult;
+  const { nodes, materials } = useGLTF(
+    '/assets/models/cup.gltf'
+  ) as GLTFResultType;
   return (
     <RigidBody
       position={props.position}

@@ -31,7 +31,7 @@ export const Cake = (props: ObjectInterface) => {
       />
     </RigidBody>
   ) : (
-    burbles.map((value, index) => (
+    burbles.map((_, index) => (
       <Burble
         key={ObjectNames.burble + '_' + index}
         position={props.position}
@@ -42,4 +42,4 @@ export const Cake = (props: ObjectInterface) => {
   );
 };
 
-useGLTF.preload('/assets/models/plate.glb');
+useGLTF.preload('/assets/models/cake.glb');

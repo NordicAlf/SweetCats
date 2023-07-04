@@ -1,23 +1,21 @@
 import { useGLTF } from '@react-three/drei';
-import { useFrame } from '@react-three/fiber';
-import React, { useRef } from 'react';
-import { Vector3 } from 'three';
+import React, { forwardRef } from 'react';
+import { RefGroupType } from '../../utils/types/RefTypes';
+import { ObjectInterface } from './Interface/ObjectInterface';
 
-interface ModelInterface {
-  scale?: Vector3;
-  position?: Vector3;
-}
-
-export const Cat: React.FC<ModelInterface> = (props: ModelInterface) => {
-  const group = useRef();
+export const Cat = forwardRef<RefGroupType, ObjectInterface>(function Cat(
+  props,
+  ref
+) {
+  // const group = useRef();
   const { nodes, materials } = useGLTF('/assets/models/cat.glb');
 
-  useFrame((state) => {
-    group.current.rotation.set(0, state.camera.rotation.y - 1.75, 0);
-  });
+  // useFrame((state) => {
+  //   group.current.rotation.set(0, state.camera.rotation.y - 1.75, 0);
+  // });
 
   return (
-    <group ref={group} {...props} dispose={null}>
+    <group {...props} ref={ref} dispose={null}>
       <group name='Sketchfab_Scene'>
         <group name='GLTF_SceneRootNode'>
           <group
@@ -69,6 +67,6 @@ export const Cat: React.FC<ModelInterface> = (props: ModelInterface) => {
       </group>
     </group>
   );
-};
+});
 
 useGLTF.preload('/assets/models/cat.glb');

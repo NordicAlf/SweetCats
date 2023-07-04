@@ -1,32 +1,37 @@
-import { KeyboardControls, PointerLockControls } from '@react-three/drei';
+import { KeyboardControls } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import { Perf } from 'r3f-perf';
 import React from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { LoaderScreen } from './components/UserInterface/Loader/LoaderScreen';
+import { Menu } from './components/UserInterface/Menu/Menu';
 import World from './components/World/World';
-
-const Keyboard = [
-  { name: 'forward', keys: ['KeyW', 'ArrowUp'] },
-  { name: 'backward', keys: ['KeyS', 'ArrowDown'] },
-  { name: 'left', keys: ['KeyA', 'ArrowLeft'] },
-  { name: 'right', keys: ['KeyD', 'ArrowRight'] },
-  { name: 'jump', keys: ['Space'] },
-  { name: 'run', keys: ['Shift'] },
-  { name: 'flyMode', keys: ['KeyM'] },
-  { name: 'flyModeDown', keys: ['Control'] },
-];
+import { RoutesList } from './core/routes';
+import './index.css';
+import { KeyboardControl } from './utils/constants/KeyboardControl';
 
 const App: React.FC = () => {
   const isDevMode = import.meta.env.DEV;
 
   return (
-    <KeyboardControls map={Keyboard}>
-      <Canvas camera={{ position: [0, 1, 5] }} linear={true}>
-        <World />
-        <PointerLockControls />
+    <KeyboardControls map={KeyboardControl}>
+      <Canvas
+        style={{ position: 'absolute', left: 0, top: 0 }}
+        camera={{ position: [0, 1, 5] }}
+        linear={true}
+      >
+        <BrowserRouter>
+          <Routes>
+            <Route path={RoutesList.menu} element={<Menu />} />
+            <Route path={RoutesList.loading} element={<LoaderScreen />} />
+            <Route path={RoutesList.game} element={<World />} />
+          </Routes>
+        </BrowserRouter>
+
         {isDevMode && (
           <>
             <Perf position={'top-left'} />
-            <gridHelper args={[100, 50, 50]} />
+            {/*<gridHelper args={[100, 50, 50]} />*/}
           </>
         )}
       </Canvas>
