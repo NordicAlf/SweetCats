@@ -15,8 +15,6 @@ export const LoaderScreen: React.FC = () => {
   camera.position.set(0, 0.1, 0.5);
 
   useFrame(({ clock }) => {
-    console.log(clock.getElapsedTime());
-
     catRef.current?.rotateY(0.08);
 
     if (clock.getElapsedTime() > 5) {

@@ -19,13 +19,9 @@ export const TextMenu: React.FC<MenuTextInterface> = (props) => {
       anchorY='middle'
       outlineColor={'#000000'}
       outlineWidth={0}
-      // strokeColor='black'
       scale={[0.05, 0.05, 0.05]}
       position={props.position}
       onClick={props.onClick}
-      // onClick={() => {
-      //   navigate('load');
-      // }}
       onPointerEnter={() => {
         ref.current.outlineWidth = 0.05;
         ref.current.color = '#C8463F';

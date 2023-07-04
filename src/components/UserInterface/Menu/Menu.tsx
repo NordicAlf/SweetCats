@@ -63,7 +63,7 @@ export const Menu: React.FC = () => {
         text='Multiplayer'
         position={new Vector3(0.3, -0.08, 0)}
         onClick={() => {
-          console.log('isCLIIICK');
+          console.log('Go to Multiplayer');
         }}
       />
       <TextMenu

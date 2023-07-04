@@ -1,5 +1,6 @@
 import { useGLTF } from '@react-three/drei';
 import React, { forwardRef } from 'react';
+import { GLTFResultType } from '../../utils/types/GLTFResultType';
 import { RefGroupType } from '../../utils/types/RefTypes';
 import { ObjectInterface } from './Interface/ObjectInterface';
 
@@ -7,12 +8,9 @@ export const Cat = forwardRef<RefGroupType, ObjectInterface>(function Cat(
   props,
   ref
 ) {
-  // const group = useRef();
-  const { nodes, materials } = useGLTF('/assets/models/cat.glb');
-
-  // useFrame((state) => {
-  //   group.current.rotation.set(0, state.camera.rotation.y - 1.75, 0);
-  // });
+  const { nodes, materials } = useGLTF(
+    '/assets/models/cat.glb'
+  ) as GLTFResultType;
 
   return (
     <group {...props} ref={ref} dispose={null}>
