@@ -1,5 +1,5 @@
 import { Ray } from '@dimforge/rapier3d-compat';
-import { useKeyboardControls } from '@react-three/drei';
+import { PointerLockControls, useKeyboardControls } from '@react-three/drei';
 import { useFrame, useThree } from '@react-three/fiber';
 import {
   CapsuleCollider,
@@ -11,17 +11,21 @@ import React, { useRef, useState } from 'react';
 import { Vector3 } from 'three';
 import ObjectNames from '../../utils/constants/ObjectNames';
 import Settings from '../../utils/constants/Settings';
+import { RefGroupType } from '../../utils/types/RefTypes';
 import { Cat } from '../Objects/Cat';
+import PauseModal from '../UserInterface/Modal/Pause/PauseModal';
 import { ControlsInterface } from './Interface/ControlsInterface';
 
 const ViewHeightAbovePlayer = 0.02;
 
 export const Player = () => {
-  const ref = useRef<RapierRigidBody>(null);
+  const rigidBodyRef = useRef<RapierRigidBody>(null);
+  const catRef = useRef<RefGroupType>(null);
   const [, getKeys] = useKeyboardControls();
   const { camera } = useThree();
   const rapier = useRapier();
-  const [isFlyMode, setFlyMode] = useState(false);
+  const [isShowModal, setShowModal] = useState(false);
+  const controlRef = useRef<PointerLockControls>(null);
 
   const direction = new Vector3();
   const frontVector = new Vector3();
@@ -32,7 +36,7 @@ export const Player = () => {
 
   useFrame((state) => {
     const controls: ControlsInterface = getKeys();
-    const velocity = ref.current.linvel();
+    const velocity = rigidBodyRef.current.linvel();
 
     // movement
     frontVector.set(
@@ -55,62 +59,69 @@ export const Player = () => {
       )
       .applyEuler(state.camera.rotation);
 
-    ref.current.setLinvel({ x: direction.x, y: velocity.y, z: direction.z });
+    if (!isShowModal) {
+      rigidBodyRef.current.setLinvel({
+        x: direction.x,
+        y: velocity.y,
+        z: direction.z,
+      });
 
-    // jumping
-    const ray = rapier.world.castRay(
-      new Ray(ref.current.translation(), { x: 0, y: -1, z: 0 })
-    );
-    const grounded = ray && ray.collider && Math.abs(ray.toi) < 0.6;
+      // jumping
+      const ray = rapier.world.castRay(
+        new Ray(rigidBodyRef.current.translation(), { x: 0, y: -1, z: 0 })
+      );
+      const grounded = ray && ray.collider && Math.abs(ray.toi) < 0.6;
 
-    if (controls.jump && grounded && !isFlyMode) {
-      ref.current.setLinvel(jumpVector);
+      if (controls.jump && grounded) {
+        rigidBodyRef.current.setLinvel(jumpVector);
+      }
     }
 
     // update camera
-    const translation = ref.current.translation();
+    const translation = rigidBodyRef.current.translation();
 
-    if (controls.flyMode && import.meta.env.DEV) {
-      setFlyMode(true);
-    }
+    state.camera.position.set(
+      translation.x,
+      translation.y + ViewHeightAbovePlayer,
+      translation.z
+    );
 
-    if (isFlyMode) {
-      jumpVector.set(
-        0,
-        Number(controls.jump) - Number(controls.flyModeDown),
-        0
-      );
-
-      state.camera.position.set(
-        state.camera.position.x + direction.x,
-        state.camera.position.y + jumpVector.y,
-        state.camera.position.z + direction.z
-      );
-    } else {
-      state.camera.position.set(
-        translation.x,
-        translation.y + ViewHeightAbovePlayer,
-        translation.z
-      );
-    }
+    catRef.current.rotation.set(0, state.camera.rotation.y - 1.75, 0);
   });
 
   return (
-    <group>
-      <RigidBody
-        ref={ref}
-        colliders={false}
-        type={'dynamic'}
-        scale={[3, 3, 3]}
-        enabledRotations={[false, false, false]}
-        mass={1}
-        position={[25, 1, 0]}
-        canSleep={false}
-        name={ObjectNames.player}
-      >
-        <Cat position={new Vector3(0, -0.1, 0)} />
-        <CapsuleCollider args={[0.02, 0.08]} />
-      </RigidBody>
-    </group>
+    <>
+      <group>
+        <RigidBody
+          ref={rigidBodyRef}
+          colliders={false}
+          type={'dynamic'}
+          scale={[3, 3, 3]}
+          enabledRotations={[false, false, false]}
+          mass={1}
+          position={[25, 1, 0]}
+          canSleep={false}
+          name={ObjectNames.player}
+        >
+          <Cat
+            position={new Vector3(0, -0.1, 0)}
+            index={0}
+            isVisible={true}
+            ref={catRef}
+          />
+          <CapsuleCollider args={[0.02, 0.08]} />
+        </RigidBody>
+      </group>
+
+      {!isShowModal && (
+        <PointerLockControls
+          ref={controlRef}
+          onUnlock={() => {
+            setShowModal(true);
+          }}
+        />
+      )}
+      <PauseModal isShow={isShowModal} setShow={setShowModal} />
+    </>
   );
 };

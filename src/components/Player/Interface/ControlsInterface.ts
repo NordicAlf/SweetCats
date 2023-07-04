@@ -5,6 +5,4 @@ export interface ControlsInterface {
   right: boolean;
   jump: boolean;
   run: boolean;
-  flyMode: boolean;
-  flyModeDown: boolean;
 }

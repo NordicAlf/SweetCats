@@ -1,3 +1,4 @@
+import { Stars } from '@react-three/drei';
 import { Physics } from '@react-three/rapier';
 import React, { Suspense } from 'react';
 import { Player } from '../Player/Player';
@@ -12,16 +13,27 @@ const WorldSize = {
 
 const World: React.FC = () => {
   return (
-    <Suspense>
-      <Skybox />
-      <ambientLight intensity={1} />
-      <pointLight castShadow intensity={0.8} position={[70, 0, 0]} />
-      <Physics debug={false} gravity={[0, -30, 0]} interpolate={false}>
-        <Ground size={WorldSize} />
-        <Room />
-        <Player />
-      </Physics>
-    </Suspense>
+    <>
+      <Suspense fallback={null}>
+        <Skybox />
+        <Stars
+          radius={100}
+          depth={50}
+          count={5000}
+          factor={4}
+          saturation={0}
+          fade
+          speed={1}
+        />
+        <ambientLight intensity={1} />
+        <pointLight castShadow intensity={0.8} position={[70, 0, 0]} />
+        <Physics debug={false} gravity={[0, -30, 0]} interpolate={false}>
+          <Ground size={WorldSize} />
+          <Room />
+          <Player />
+        </Physics>
+      </Suspense>
+    </>
   );
 };
 

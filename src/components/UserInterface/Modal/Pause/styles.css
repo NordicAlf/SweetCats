@@ -1,0 +1,28 @@
+@import "src/components/UserInterface/Modal/abstractStyles.css";
+
+.modal-pause {
+    padding: 300px;
+}
+
+.modal-pause h1 {
+    color: #ffffff;
+    text-align: center;
+}
+
+.modal-pause p {
+    color: #ffffff;
+    font-size: 24px;
+}
+
+.modal-pause a {
+    display:block;
+    text-align: center;
+    font-size: 48px;
+    text-decoration: none;
+    color: white;
+}
+
+.modal-pause a:hover {
+    text-decoration: none;
+    color: red;
+}
