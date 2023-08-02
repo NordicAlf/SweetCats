@@ -1,7 +1,7 @@
 import { KeyboardControls } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import { Perf } from 'r3f-perf';
-import React from 'react';
+import React, {useEffect} from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { LoaderScreen } from './components/UserInterface/Loader/LoaderScreen';
 import { Menu } from './components/UserInterface/Menu/Menu';
@@ -9,9 +9,16 @@ import World from './components/World/World';
 import { RoutesList } from './core/routes';
 import './index.css';
 import { KeyboardControl } from './utils/constants/KeyboardControl';
+import {useGameStore} from "./store/GameStore";
 
 const App: React.FC = () => {
   const isDevMode = import.meta.env.DEV;
+
+    const createGameServer = useGameStore((gameStore) => gameStore.actions.createGameServer);
+
+    useEffect(() => {
+        createGameServer();
+    }, []);
 
   return (
     <KeyboardControls map={KeyboardControl}>
