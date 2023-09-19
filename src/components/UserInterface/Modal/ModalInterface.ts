@@ -1,6 +1,6 @@
 import React from 'react';
 
-export interface HelpModalInterface {
+export interface ModalInterface {
   isShow: boolean;
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
 }

@@ -3,10 +3,10 @@ import { useFrame, useThree } from '@react-three/fiber';
 import React, { useRef } from 'react';
 import { Vector3 } from 'three';
 import { RefGroupType } from '../../../../utils/types/RefTypes';
-import { HelpModalInterface } from '../ModalInterface';
+import { ModalInterface } from '../ModalInterface';
 import './styles.css';
 
-const HelpModal: React.FC<HelpModalInterface> = (props) => {
+const HelpModal: React.FC<ModalInterface> = (props) => {
   const modalRef = useRef<RefGroupType>(null);
   const { camera } = useThree();
   const rotation = new Vector3();

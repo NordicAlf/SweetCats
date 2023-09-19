@@ -7,7 +7,7 @@ import {
   RigidBody,
   useRapier,
 } from '@react-three/rapier';
-import React, { useRef, useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import { Vector3 } from 'three';
 import ObjectNames from '../../utils/constants/ObjectNames';
 import Settings from '../../utils/constants/Settings';
@@ -15,16 +15,19 @@ import { RefGroupType } from '../../utils/types/RefTypes';
 import { Cat } from '../Objects/Cat';
 import PauseModal from '../UserInterface/Modal/Pause/PauseModal';
 import { ControlsInterface } from './Interface/ControlsInterface';
+import {ObjectInterface} from "../Objects/Interface/ObjectInterface";
+import {Vector} from "@dimforge/rapier3d-compat/math";
 
 const ViewHeightAbovePlayer = 0.02;
 
-export const Player = () => {
+export const Player = (props: ObjectInterface) => {
   const rigidBodyRef = useRef<RapierRigidBody>(null);
   const catRef = useRef<RefGroupType>(null);
   const [, getKeys] = useKeyboardControls();
   const { camera } = useThree();
   const rapier = useRapier();
   const [isShowModal, setShowModal] = useState(false);
+  const [playerPosition, setPlayerPosition] = useState<Vector>(new Vector3());
   const controlRef = useRef<PointerLockControls>(null);
 
   const direction = new Vector3();
@@ -79,6 +82,8 @@ export const Player = () => {
 
     // update camera
     const translation = rigidBodyRef.current.translation();
+    // console.log(translation);
+    setPlayerPosition(translation);
 
     state.camera.position.set(
       translation.x,
@@ -88,6 +93,11 @@ export const Player = () => {
 
     catRef.current.rotation.set(0, state.camera.rotation.y - 1.75, 0);
   });
+
+  useEffect(() => {
+    console.log('позиция тела кота');
+    console.log(playerPosition);
+  }, [playerPosition]);
 
   return (
     <>
@@ -99,7 +109,7 @@ export const Player = () => {
           scale={[3, 3, 3]}
           enabledRotations={[false, false, false]}
           mass={1}
-          position={[25, 1, 0]}
+          position={props.position}
           canSleep={false}
           name={ObjectNames.player}
         >

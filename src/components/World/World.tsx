@@ -5,6 +5,8 @@ import { Player } from '../Player/Player';
 import Skybox from './Air/Skybox';
 import { Ground } from './Ground/Ground';
 import Room from './Room/Room';
+import usePlayerStore from "../../store/PlayerStore";
+import {Vector3} from "three";
 
 const WorldSize = {
   x: 50,
@@ -12,6 +14,8 @@ const WorldSize = {
 };
 
 const World: React.FC = () => {
+  const players = usePlayerStore((playerStore) => playerStore.positions);
+
   return (
     <>
       <Suspense fallback={null}>
@@ -30,7 +34,14 @@ const World: React.FC = () => {
         <Physics debug={false} gravity={[0, -30, 0]} interpolate={false}>
           <Ground size={WorldSize} />
           <Room />
-          <Player />
+          {players !== null && players.map((item, index) => (
+            <Player
+              uuid={item.id}
+              position={(new Vector3()).fromArray(item.position)}
+              index={index}
+              isVisible={true}
+            />
+          ))}
         </Physics>
       </Suspense>
     </>

@@ -5,12 +5,17 @@ import Floor from './Floor/Floor';
 import Plates from './Plates/Plates';
 import Table from './Table/Table';
 import Walls from './Walls';
+import {Vector3} from "three";
 
 const Room: React.FC = () => {
   return (
     <>
       <group dispose={null} scale={[0.1, 0.1, 0.1]}>
-        <House />
+        <House
+          position={new Vector3(0, 0 ,0)}
+          isVisible={true}
+          index={0}
+        />
         <Floor />
         <Table />
       </group>

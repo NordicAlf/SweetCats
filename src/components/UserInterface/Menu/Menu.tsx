@@ -10,12 +10,14 @@ import House from '../../Objects/House';
 import Skybox from '../../World/Air/Skybox';
 import HelpModal from '../Modal/Help/HelpModal';
 import { TextMenu } from './TextMenu';
+import MultiplayerModal from "../Modal/Multiplayer/MultiplayerModal";
 
 export const Menu: React.FC = () => {
   const { camera } = useThree();
   const navigate = useNavigate();
   const catRef = useRef<RefGroupType>(null);
-  const [isShowModal, setShowModal] = useState(false);
+  const [isShowHelpModal, setShowHelpModal] = useState(false);
+  const [isShowMultiplayerModal, setShowMultiplayerModal] = useState(false);
 
   camera.position.set(0, 0, 0.5);
 
@@ -63,17 +65,18 @@ export const Menu: React.FC = () => {
         text='Multiplayer'
         position={new Vector3(0.3, -0.08, 0)}
         onClick={() => {
-          console.log('Go to Multiplayer');
+          setShowMultiplayerModal(true);
         }}
       />
       <TextMenu
         text='Help'
         position={new Vector3(0.3, -0.18, 0)}
         onClick={() => {
-          setShowModal(true);
+          setShowHelpModal(true);
         }}
       />
-      <HelpModal isShow={isShowModal} setShow={setShowModal} />
+      <HelpModal isShow={isShowHelpModal} setShow={setShowHelpModal} />
+      <MultiplayerModal isShow={isShowMultiplayerModal} setShow={setShowMultiplayerModal} />
     </>
   );
 };

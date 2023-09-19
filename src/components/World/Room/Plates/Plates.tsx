@@ -5,32 +5,33 @@ import ObjectNames from '../../../../utils/constants/ObjectNames';
 import { getRandomInt } from '../../../../utils/functions/randomNumberGenerator';
 import { Cake } from '../../../Objects/Cake';
 import { Plate } from '../../../Objects/Plate';
+import {Vector3} from "three";
 
 const Plates: React.FC = () => {
   const plateModel = useGLTF('/assets/models/plate.glb');
   const cakeModel = useGLTF('/assets/models/cake.glb');
-  const positions = usePlateStore((state) => state.positions);
+  const plates = usePlateStore((state) => state.plates);
 
   return (
-    <group>
+    plates && <group>
       <Plate
         key={666}
-        positions={positions}
+        positions={plates}
         model={plateModel}
-        countInstances={positions.length}
+        countInstances={plates.length}
       />
-      {positions.map((item, index) => (
+      {plates.map((item, index) => (
         <Cake
-          key={ObjectNames.cake + '_' + index}
+          key={ObjectNames.cake + '_' + item.id}
           index={index}
-          position={item}
+          position={(new Vector3()).fromArray(item.position)}
           mesh={cakeModel.scenes[0].children[getRandomInt(0, 12)]}
-          count={positions.length}
+          count={plates.length}
           isVisible={true}
         />
       ))}
     </group>
-  );
+    );
 };
 
 useGLTF.preload('/assets/models/plate.glb');
