@@ -5,10 +5,12 @@ import useBurbleStore from '../../store/BurbleStore';
 import ObjectNames from '../../utils/constants/ObjectNames';
 import { Burble } from './Burble';
 import { ObjectInterface } from './Interface/ObjectInterface';
+import {useGameStore} from "../../store/GameStore";
 
 export const Cake = (props: ObjectInterface) => {
   const [isVisible, setVisible] = useState(true);
   const burbles = useBurbleStore((burbleStore) => burbleStore.burbles);
+  const cakeRemove = useGameStore((gameStore) => gameStore.actions.objectRemove);
 
   props.position.setY(props.position.y + 0.05);
 
@@ -19,6 +21,7 @@ export const Cake = (props: ObjectInterface) => {
       key={props.index}
       onCollisionEnter={() => {
         setVisible(false);
+        cakeRemove(props.index)
       }}
       name={ObjectNames.cake}
       scale={2}

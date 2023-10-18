@@ -1,7 +1,7 @@
 import { Euler } from '@react-three/fiber';
 import { Mesh, Vector3 } from 'three';
 import { GLTF } from 'three-stdlib';
-import {PlateType} from "../../../store/PlateStore";
+import {PlateType} from "../../../store/ObjectStore";
 
 export interface ObjectInstanceInterface {
   countInstances: number;
@@ -10,11 +10,11 @@ export interface ObjectInstanceInterface {
 }
 
 export interface ObjectInterface {
-  uuid?: string; // fix it
+  uuid?: string; // TO-DO fix it
   position: Vector3;
   rotation?: Euler;
   scale?: Vector3;
-  index: number;
+  index: number | string; // TO-DO fix it
   isVisible: boolean;
   mesh?: Mesh;
 }

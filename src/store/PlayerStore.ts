@@ -1,22 +1,34 @@
 import { create } from 'zustand';
 
 type State = {
-  positions: Pos[] | null
+  ownerPlayerId: string | null,
+  users: User[] | null,
+  userPositions: {
+    [id: string]: UserPosition
+  } | null
   actions: {
-    setPositions: (positions: any) => void
+    setOwnerPlayerId: (userId: string | null) => void,
+    setUsers: (users: any) => void,
+    setUserPositions: (users: any) => void,
   }
 }
 
-type Pos = {
-  id: string,
+type User = {
+  id: string
+}
+
+type UserPosition = {
   position: number[]
 }
 
 const usePlayerStore = create<State>((set) => ({
-  positions: null,
+  ownerPlayerId: null,
+  users: null,
+  userPositions: null,
   actions: {
-    setPositions: (positions: any) => set(() => ({positions: positions})),
-
+    setOwnerPlayerId: (userId: string | null) => set(() => ({ownerPlayerId: userId})),
+    setUsers: (users: any) => set(() => ({users: users})),
+    setUserPositions: (users: any) => set(() => ({userPositions: users})),
   }
 }));
 

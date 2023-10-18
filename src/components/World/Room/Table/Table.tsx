@@ -10,39 +10,39 @@ const Table: React.FC = () => {
       <TableItem
         position={new Vector3(0, 0, 0)}
         index={0}
-        key={0}
+        key={'tableItem0'}
         isVisible={true}
       />
 
       <group>
         <Teapot
           position={new Vector3(-40, 50, 15)}
-          key={0}
+          key={'teapot0'}
           index={0}
           isVisible={true}
         />
         <Cup
           position={new Vector3(-5, 50, -35)}
-          key={0}
+          key={'cup0'}
           index={0}
           isVisible={true}
         />
         <Cup
           position={new Vector3(10, 50, 35)}
-          key={0}
-          index={0}
+          key={'cup1'}
+          index={1}
           isVisible={true}
         />
         <Cup
           position={new Vector3(-75, 50, 5)}
-          key={0}
-          index={0}
+          key={'cup2'}
+          index={2}
           isVisible={true}
         />
         <Cup
           position={new Vector3(80, 50, -5)}
-          key={0}
-          index={0}
+          key={'cup3'}
+          index={3}
           isVisible={true}
         />
       </group>
