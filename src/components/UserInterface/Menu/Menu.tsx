@@ -1,6 +1,6 @@
 import { Stars } from '@react-three/drei';
 import { useFrame, useThree } from '@react-three/fiber';
-import React, { useRef, useState } from 'react';
+import React, {useRef, useState} from 'react';
 import { useNavigate } from 'react-router';
 import { Euler, Vector3 } from 'three';
 import { RoutesList } from '../../../core/routes';
@@ -20,6 +20,7 @@ export const Menu: React.FC = () => {
   const [isShowMultiplayerModal, setShowMultiplayerModal] = useState(false);
 
   camera.position.set(0, 0, 0.5);
+  camera.rotation.set(-0.1, 0, 0);
 
   useFrame(() => {
     catRef.current.rotateY(0.05);
@@ -56,21 +57,21 @@ export const Menu: React.FC = () => {
       />
       <TextMenu
         text='Single'
-        position={new Vector3(0.3, 0.02, 0)}
+        position={new Vector3(0.3, 0.06, 0)}
         onClick={() => {
           navigate(RoutesList.loading);
         }}
       />
       <TextMenu
         text='Multiplayer'
-        position={new Vector3(0.3, -0.08, 0)}
+        position={new Vector3(0.3, -0.04, 0)}
         onClick={() => {
           setShowMultiplayerModal(true);
         }}
       />
       <TextMenu
         text='Help'
-        position={new Vector3(0.3, -0.18, 0)}
+        position={new Vector3(0.3, -0.14, 0)}
         onClick={() => {
           setShowHelpModal(true);
         }}

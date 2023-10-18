@@ -1,32 +1,70 @@
 import { create } from "zustand";
-import {RequestTypeEnum, RoomAction} from "../utils/enum/RequestEnum";
-import PlateStore from "./PlateStore";
-import {ResponseTypeEnum} from "../utils/enum/ResponseEnum";
+import {RequestActionEnum} from "../utils/enum/RequestEnum";
 import PlayerStore from "./PlayerStore";
 import {Vector} from "@dimforge/rapier3d-compat/math";
+import ObjectStore from "./ObjectStore";
+import RoomStore from "./RoomStore";
 
-interface GameStoreInterface {
+interface CreateRoomInterface {
     password: string
 }
 
-interface PlayerInterface {
+interface ObjectInterface {
+    id: string,
+    roomId: string,
+    type: string,
+    position: number[]
+}
+
+export interface PlayerInterface {
+    id: string
     position: Vector
 }
 
 export interface ResponseInterface {
     status: string,
-    type: string
+    action: string
 }
 
-export interface ResponsePositionsInterface extends ResponseInterface {
+export interface RoomResponseInterface extends ResponseInterface {
     data: {
-        cakes: {
-            id: string,
-            roomId: string,
-            type: string,
-            position: number[]
-        },
-        users: UserInterface
+        roomId: string,
+        ownerPlayerId: string,
+        roomCreatorUserId: string,
+        cakes: ObjectInterface[],
+        users: UserInterface[]
+    }
+}
+
+export interface RoomRunInterface extends ResponseInterface
+{
+    data: {
+        roomStatus: string,
+    }
+}
+
+export interface RoomExitInterface extends ResponseInterface
+{
+    data: {
+        roomStatus: string,
+        users: UserInterface[],
+        userExit: string,
+    }
+}
+
+export interface CakeResponseInterface extends ResponseInterface {
+    data: {
+        cakes: ObjectInterface[]
+    }
+}
+
+export interface PlayerPositionsResponse extends ResponseInterface {
+    data: {
+        users: {
+            [id: string]: {
+                position: number[]
+            }
+        }
     }
 }
 
@@ -35,10 +73,8 @@ export interface UserInterface {
     position: number[]
 }
 
-export const useGameStore = create((set) => {
+export const useGameStore = create(() => {
     const websocketClient = new WebSocket('ws://localhost:8000');
-
-    // let response: ResponseInterface | null = null;
 
     websocketClient.addEventListener('open', () => {
         // websocketClient.send('i am connect to server!');
@@ -52,58 +88,102 @@ export const useGameStore = create((set) => {
     websocketClient.addEventListener('message', (message) => {
         const jsonResponse = JSON.parse(message.data);
 
-        // console.log(jsonResponse);
+        if (jsonResponse.action === RequestActionEnum.RoomCreate) {
+            const responseData: RoomResponseInterface = jsonResponse;
 
-        // if (jsonResponse.type === ResponseTypeEnum.positions) {
-        //     const responseData: ResponsePositionsInterface = jsonResponse;
-        //
-        //     PlateStore.getState().actions.setPositions(responseData.data.platePositions);
-        // }
-
-        if (jsonResponse.type === ResponseTypeEnum.dataChannel) {
-            const responseData: ResponsePositionsInterface = jsonResponse;
-
-            PlateStore.getState().actions.setPlates(responseData.data.cakes);
-            PlayerStore.getState().actions.setPositions(responseData.data.users);
+            RoomStore.getState().actions.setRoomId(responseData.data.roomId);
+            RoomStore.getState().actions.setRoomCreatorUserId(responseData.data.roomCreatorUserId);
+            ObjectStore.getState().actions.setPlates(responseData.data.cakes);
+            ObjectStore.getState().actions.setCakes(responseData.data.cakes);
+            PlayerStore.getState().actions.setUsers(responseData.data.users);
+            PlayerStore.getState().actions.setOwnerPlayerId(responseData.data.ownerPlayerId);
         }
 
-        // const responseData: ResponseInterface = JSON.parse(message.data);
+        if (jsonResponse.action === RequestActionEnum.RoomJoin) {
+            const responseData: RoomResponseInterface = jsonResponse;
 
-        // storeData.actions.setResponse(responseData);
+            RoomStore.getState().actions.setRoomId(responseData.data.roomId);
+            RoomStore.getState().actions.setRoomCreatorUserId(responseData.data.roomCreatorUserId);
+            ObjectStore.getState().actions.setPlates(responseData.data.cakes);
+            ObjectStore.getState().actions.setCakes(responseData.data.cakes);
+            PlayerStore.getState().actions.setUsers(responseData.data.users);
+            PlayerStore.getState().actions.setOwnerPlayerId(responseData.data.ownerPlayerId);
+        }
 
-        // if (responseData.type === ResponseTypeEnum.positions) {
-        //     console.log('positions typeeee');
-        //     console.log(responseData);
-        //     PlateStore.getState().actions.setPositions(responseData.data)
-        // }
+        if (jsonResponse.action === RequestActionEnum.RoomRun) {
+            const responseData: RoomRunInterface = jsonResponse;
+
+            RoomStore.getState().actions.setRoomStatus(responseData.data.roomStatus);
+        }
+
+        if (jsonResponse.action === RequestActionEnum.RoomExit) {
+            const responseData: RoomExitInterface = jsonResponse;
+
+            if (responseData.data.userExit === PlayerStore.getState().ownerPlayerId ||
+              responseData.data.userExit === RoomStore.getState().roomCreatorUserId) {
+                RoomStore.getState().actions.setRoomId(null);
+                RoomStore.getState().actions.setRoomCreatorUserId(null);
+            }
+
+            PlayerStore.getState().actions.setUsers(responseData.data.users);
+            RoomStore.getState().actions.setRoomStatus(responseData.data.roomStatus);
+        }
+
+        if (jsonResponse.action === RequestActionEnum.PlayerPositionUpdate) {
+            const responseData: PlayerPositionsResponse = jsonResponse;
+
+            PlayerStore.getState().actions.setUserPositions(responseData.data.users);
+        }
+
+        if (jsonResponse.action === RequestActionEnum.ObjectRemove) {
+            const responseData: CakeResponseInterface = jsonResponse;
+
+            ObjectStore.getState().actions.setCakes(responseData.data.cakes);
+        }
     })
-
-    // const setResponse = (data: ResponseInterface) => () => set({response: data})
 
     const storeData = {
         response: null,
         actions: {
-            setResponse: (responseData: ResponseInterface) => set(() => ({response: responseData})),
-            createGameServer(props: GameStoreInterface) {
+            roomCreate(props: CreateRoomInterface) {
                 websocketClient.send(JSON.stringify({
-                    requestType: RequestTypeEnum.room,
-                    roomAction: RoomAction.create,
+                    action: RequestActionEnum.RoomCreate,
                     roomPassword: props.password,
                 }));
             },
-            joinToGameServer(props: GameStoreInterface) {
+            roomJoin(props: CreateRoomInterface) {
                 websocketClient.send(JSON.stringify({
-                    requestType: RequestTypeEnum.room,
-                    roomAction: RoomAction.join,
+                    action: RequestActionEnum.RoomJoin,
                     roomPassword: props.password,
+                }));
+            },
+            roomRun() {
+                websocketClient.send(JSON.stringify({
+                    action: RequestActionEnum.RoomRun,
+                    roomId: RoomStore.getState().roomId,
+                }));
+            },
+            roomExit() {
+                websocketClient.send(JSON.stringify({
+                    action: RequestActionEnum.RoomExit,
+                    roomId: RoomStore.getState().roomId,
                 }));
             },
             playerUpdate(props: PlayerInterface) {
                 websocketClient.send(JSON.stringify({
-                    requestType: RequestTypeEnum.player,
+                    action: RequestActionEnum.PlayerPositionUpdate,
+                    roomId: RoomStore.getState().roomId,
+                    userId: props.id,
                     position: props.position,
                 }));
             },
+            objectRemove(objectId: string) {
+                websocketClient.send(JSON.stringify({
+                    action: RequestActionEnum.ObjectRemove,
+                    roomId: RoomStore.getState().roomId,
+                    objectId: objectId,
+                }));
+            }
         }
     }
 

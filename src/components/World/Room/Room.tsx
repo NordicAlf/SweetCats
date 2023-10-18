@@ -2,10 +2,11 @@ import React from 'react';
 import House from '../../Objects/House';
 import Ceiling from './Ceiling/Ceiling';
 import Floor from './Floor/Floor';
-import Plates from './Plates/Plates';
 import Table from './Table/Table';
 import Walls from './Walls';
 import {Vector3} from "three";
+import Players from "./Players/Players";
+import Dish from "./Dish/Dish";
 
 const Room: React.FC = () => {
   return (
@@ -22,7 +23,8 @@ const Room: React.FC = () => {
 
       <Walls />
       <Ceiling />
-      <Plates />
+      <Dish />
+      <Players />
     </>
   );
 };

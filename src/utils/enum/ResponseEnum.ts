@@ -3,9 +3,4 @@ enum ResponseStatusEnum {
   error = 'error',
 }
 
-enum ResponseTypeEnum {
-  positions = 'positions',
-  dataChannel = 'data_channel'
-}
-
-export {ResponseStatusEnum, ResponseTypeEnum}
+export {ResponseStatusEnum}

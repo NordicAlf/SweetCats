@@ -16,7 +16,11 @@ import { Cat } from '../Objects/Cat';
 import PauseModal from '../UserInterface/Modal/Pause/PauseModal';
 import { ControlsInterface } from './Interface/ControlsInterface';
 import {ObjectInterface} from "../Objects/Interface/ObjectInterface";
-import {Vector} from "@dimforge/rapier3d-compat/math";
+import {useGameStore} from "../../store/GameStore";
+import useRoomStore from "../../store/RoomStore";
+import {RoomStatusEnum} from "../../utils/enum/RoomStatusEnum";
+import {RoutesList} from "../../core/routes";
+import {useNavigate} from "react-router";
 
 const ViewHeightAbovePlayer = 0.02;
 
@@ -27,15 +31,24 @@ export const Player = (props: ObjectInterface) => {
   const { camera } = useThree();
   const rapier = useRapier();
   const [isShowModal, setShowModal] = useState(false);
-  const [playerPosition, setPlayerPosition] = useState<Vector>(new Vector3());
   const controlRef = useRef<PointerLockControls>(null);
+  const navigate = useNavigate();
+  const playerUpdate = useGameStore((gameStore) => gameStore.actions.playerUpdate);
+  const roomStatus = useRoomStore((roomStore) => roomStore.roomStatus);
 
   const direction = new Vector3();
   const frontVector = new Vector3();
   const sideVector = new Vector3();
   const jumpVector = new Vector3(0, Settings.jumpHeight, 0);
+  const zeroVector = new Vector3();
 
   camera.rotation.order = 'YXZ';
+
+  useEffect(() => {
+    if (roomStatus === RoomStatusEnum.Exit) {
+      navigate(RoutesList.menu);
+    }
+  }, [roomStatus])
 
   useFrame((state) => {
     const controls: ControlsInterface = getKeys();
@@ -78,12 +91,18 @@ export const Player = (props: ObjectInterface) => {
       if (controls.jump && grounded) {
         rigidBodyRef.current.setLinvel(jumpVector);
       }
+
+      // if player on the move
+      if (!direction.equals(zeroVector) || !grounded) {
+        playerUpdate({
+          id: props.uuid,
+          position: rigidBodyRef.current.translation()
+        });
+      }
     }
 
     // update camera
     const translation = rigidBodyRef.current.translation();
-    // console.log(translation);
-    setPlayerPosition(translation);
 
     state.camera.position.set(
       translation.x,
@@ -92,12 +111,10 @@ export const Player = (props: ObjectInterface) => {
     );
 
     catRef.current.rotation.set(0, state.camera.rotation.y - 1.75, 0);
-  });
 
-  useEffect(() => {
-    console.log('позиция тела кота');
-    console.log(playerPosition);
-  }, [playerPosition]);
+    // Здесь можно попробовать привязать угол камеры для игроков по оси Y, для передачи с сервера
+    // console.log(state.camera.rotation.y - 1.75);
+  });
 
   return (
     <>
@@ -106,7 +123,7 @@ export const Player = (props: ObjectInterface) => {
           ref={rigidBodyRef}
           colliders={false}
           type={'dynamic'}
-          scale={[3, 3, 3]}
+          scale={[5, 5, 5]}
           enabledRotations={[false, false, false]}
           mass={1}
           position={props.position}

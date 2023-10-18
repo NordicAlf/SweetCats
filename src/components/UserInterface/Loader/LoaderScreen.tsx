@@ -1,6 +1,6 @@
 import { Stars, Text } from '@react-three/drei';
 import { useFrame, useThree } from '@react-three/fiber';
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import { useNavigate } from 'react-router';
 import { Vector3 } from 'three';
 import { RoutesList } from '../../../core/routes';
@@ -9,39 +9,47 @@ import { Cat } from '../../Objects/Cat';
 import {useGameStore} from "../../../store/GameStore";
 import usePlayerStore from "../../../store/PlayerStore";
 import {TextMenu} from "../Menu/TextMenu";
-import usePlateStore from "../../../store/PlateStore";
+import useRoomStore from "../../../store/RoomStore";
+import {RoomStatusEnum} from "../../../utils/enum/RoomStatusEnum";
 
 export const LoaderScreen: React.FC = () => {
   const catRef = useRef<RefGroupType>(null);
   const { camera } = useThree();
   const navigate = useNavigate();
-  const plates = usePlateStore((plateStore) => plateStore.plates);
-  const players = usePlayerStore((playerStore) => playerStore.positions);
+  const players = usePlayerStore((playerStore) => playerStore.users);
+  const ownerPlayerId = usePlayerStore((playerStore) => playerStore.ownerPlayerId);
+  const roomCreatorUserId = useRoomStore((roomStore) => roomStore.roomCreatorUserId);
+  const roomStatus = useRoomStore((roomStore) => roomStore.roomStatus);
+  const roomRun = useGameStore((gameStore) => gameStore.actions.roomRun);
+  const [countPlayers, setCountPlayers] = useState(0);
+  const [isYouAreCreatorRoom, setYouAreCreatorRoom] = useState(false);
 
   camera.position.set(0, 0.1, 0.5);
+  camera.rotation.set(-0.2, 0, 0);
 
-  useFrame(({ clock }) => {
+  useFrame(() => {
     catRef.current?.rotateY(0.08);
-
-    // if (clock.getElapsedTime() > 5) {
-    //   navigate(RoutesList.game);
-    // }
   });
 
-  // useEffect(() => {
-  //   console.log(cakes);
-  // }, [cakes])
+  useEffect(() => {
+    if (players) {
+      setCountPlayers(players.length);
+    }
+  }, [players])
 
   useEffect(() => {
-    // console.log('---------------');
-    // console.log('platesA');
-    // console.log(plates);
-    // console.log('platesB');
-    // console.log('playersA');
-    // console.log(players);
-    // console.log('playersB');
-    // console.log('---------------');
-  }, [players, plates])
+    if (ownerPlayerId && roomCreatorUserId) {
+      if (ownerPlayerId === roomCreatorUserId) {
+        setYouAreCreatorRoom(true);
+      }
+    }
+  }, [ownerPlayerId, roomCreatorUserId])
+
+  useEffect(() => {
+    if (roomStatus === RoomStatusEnum.Run) {
+      navigate(RoutesList.game);
+    }
+  }, [roomStatus])
 
   return (
     <group>
@@ -64,13 +72,22 @@ export const LoaderScreen: React.FC = () => {
       >
         Loading
       </Text>
-      <TextMenu
+      <Text
+        color='white'
+        anchorX='center'
+        anchorY='middle'
+        scale={[0.03, 0.03, 0.03]}
+        position={[0, -0.13, 0]}
+      >
+        Players: {countPlayers}
+      </Text>
+      {isYouAreCreatorRoom && <TextMenu
         text='GO'
         position={new Vector3(0.3, 0.02, 0)}
         onClick={() => {
-          navigate(RoutesList.game);
+          roomRun();
         }}
-      />
+      />}
     </group>
   );
 };
