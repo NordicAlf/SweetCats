@@ -53,7 +53,7 @@ export const LoaderScreen: React.FC = () => {
 
   return (
     <group>
-      <Cat position={new Vector3()} index={0} isVisible={true} ref={catRef} />
+      <Cat position={new Vector3()} index={'0'} isVisible={true} ref={catRef} />
       <Stars
         radius={100}
         depth={50}

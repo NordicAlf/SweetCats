@@ -1,15 +1,12 @@
 import { useGLTF } from '@react-three/drei';
 import { RigidBody } from '@react-three/rapier';
 import React, { useState } from 'react';
-import useBurbleStore from '../../store/BurbleStore';
 import ObjectNames from '../../utils/constants/ObjectNames';
-import { Burble } from './Burble';
 import { ObjectInterface } from './Interface/ObjectInterface';
 import {useGameStore} from "../../store/GameStore";
 
 export const Cake = (props: ObjectInterface) => {
   const [isVisible, setVisible] = useState(true);
-  const burbles = useBurbleStore((burbleStore) => burbleStore.burbles);
   const cakeRemove = useGameStore((gameStore) => gameStore.actions.objectRemove);
 
   props.position.setY(props.position.y + 0.05);
@@ -33,16 +30,7 @@ export const Cake = (props: ObjectInterface) => {
         scale={0.01}
       />
     </RigidBody>
-  ) : (
-    burbles.map((_, index) => (
-      <Burble
-        key={ObjectNames.burble + '_' + index}
-        position={props.position}
-        index={index}
-        isVisible={!isVisible}
-      />
-    ))
-  );
+  ) : null
 };
 
 useGLTF.preload('/assets/models/cake.glb');

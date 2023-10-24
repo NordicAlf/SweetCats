@@ -12,12 +12,14 @@ export const Plate: React.FC<ObjectInstanceInterface> = (props) => {
     const instances: InstancedRigidBodyProps[] = [];
 
     for (let i = 0; i < props.countInstances; i++) {
+      // @ts-ignore
+      const position = props.positions[i];
       instances.push({
         key: i,
-        position: (new Vector3()).fromArray(props.positions[i].position),
+        position: (new Vector3()).fromArray(position.position),
         rotation: [-Math.PI / 2, 0, 0],
         scale: [0.8, 0.8, 0.8],
-        name: ObjectNames.plate + '_' + props.positions[i].id,
+        name: ObjectNames.plate + '_' + position.id,
       });
     }
     return instances;

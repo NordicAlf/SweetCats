@@ -9,25 +9,25 @@ const Floor: React.FC = () => {
         position={new Vector3(150, 0, 0)}
         key={1}
         isVisible={true}
-        index={1}
+        index={'1'}
       />
       <Zabuton
         position={new Vector3(-150, 0, 0)}
         key={2}
         isVisible={true}
-        index={2}
+        index={'2'}
       />
       <Zabuton
         position={new Vector3(0, 0, 100)}
         key={3}
         isVisible={true}
-        index={3}
+        index={'3'}
       />
       <Zabuton
         position={new Vector3(0, 0, -110)}
         key={4}
         isVisible={true}
-        index={4}
+        index={'4'}
       />
     </group>
   );

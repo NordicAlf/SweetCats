@@ -23,7 +23,7 @@ export const Menu: React.FC = () => {
   camera.rotation.set(-0.1, 0, 0);
 
   useFrame(() => {
-    catRef.current.rotateY(0.05);
+    catRef.current && catRef.current.rotateY(0.05);
   });
 
   return (
@@ -45,14 +45,14 @@ export const Menu: React.FC = () => {
         position={new Vector3(-0.35, -0.1, 0)}
         rotation={new Euler(0, Math.PI * 1.82, 0)}
         isVisible={true}
-        index={0}
+        index={'0'}
       />
       <Cat
         ref={catRef}
         position={new Vector3(-0.3, -0.1, 0)}
         scale={new Vector3(1, 1, 1)}
         rotation={new Euler(0, Math.PI / 1.3, 0)}
-        index={0}
+        index={'0'}
         isVisible={true}
       />
       <TextMenu
