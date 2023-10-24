@@ -4,9 +4,10 @@ import ObjectNames from '../../../../../utils/constants/ObjectNames';
 import { Cake } from '../../../../Objects/Cake';
 import {Vector3} from "three";
 import {useObjectStore} from "../../../../../store/ObjectStore";
+import cake from '~/assets/models/cake.glb?url';
 
 const Cakes: React.FC = () => {
-  const cakeModel = useGLTF('/assets/models/cake.glb');
+  const cakeModel = useGLTF(cake);
   const cakes = useObjectStore((state) => state.cakes);
 
   return (
@@ -26,7 +27,7 @@ const Cakes: React.FC = () => {
   );
 };
 
-useGLTF.preload('/assets/models/cake.glb');
+useGLTF.preload(cake);
 
 export default Cakes;
 

@@ -2,11 +2,10 @@ import { useGLTF } from '@react-three/drei';
 import React from 'react';
 import { GLTFResultType } from '../../utils/types/GLTFResultType';
 import { ObjectInterface } from './Interface/ObjectInterface';
+import room from '~/assets/models/room.glb?url';
 
 const House: React.FC<ObjectInterface> = (props) => {
-  const { nodes, materials } = useGLTF(
-    '/assets/models/room.glb'
-  ) as GLTFResultType;
+  const { nodes, materials } = useGLTF(room) as GLTFResultType;
 
   return (
     <group
@@ -40,4 +39,4 @@ const House: React.FC<ObjectInterface> = (props) => {
 
 export default House;
 
-useGLTF.preload('/assets/models/room.glb');
+useGLTF.preload(room);

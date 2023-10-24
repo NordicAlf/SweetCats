@@ -3,11 +3,10 @@ import { CylinderCollider, RigidBody } from '@react-three/rapier';
 import React from 'react';
 import { GLTFResultType } from '../../utils/types/GLTFResultType';
 import { ObjectInterface } from './Interface/ObjectInterface';
+import teapot from '~/assets/models/teapot.gltf?url';
 
 const Teapot: React.FC<ObjectInterface> = (props) => {
-  const { nodes, materials } = useGLTF(
-    '/assets/models/teapot.gltf'
-  ) as GLTFResultType;
+  const { nodes, materials } = useGLTF(teapot) as GLTFResultType;
   return (
     <RigidBody
       position={props.position}
@@ -32,4 +31,4 @@ const Teapot: React.FC<ObjectInterface> = (props) => {
 
 export default Teapot;
 
-useGLTF.preload('/assets/models/teapot.gltf');
+useGLTF.preload(teapot);

@@ -1,0 +1,36 @@
+on:
+  push:
+    branches:
+      - master
+name: Deploy build
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Install
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: GitHub Pages Deploy
+        uses: JamesIves/github-pages-deploy-action@releases/v4
+        with:
+          BRANCH: build
+          FOLDER: dist
+
+      - name: install ssh keys
+        run: |
+          install -m 600 -D /dev/null ~/.ssh/id_rsa
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.SSH_HOST }} > ~/.ssh/known_hosts
+
+      - name: pull project
+        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd ${{ secrets.WORK_DIR }} && git checkout ${{ secrets.DEPLOY_BRANCH }} && git pull"
+
+      - name: cleanup
+        run: rm -rf ~/.ssh

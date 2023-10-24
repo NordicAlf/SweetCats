@@ -3,9 +3,10 @@ import React from 'react';
 import { Plate } from '../../../../Objects/Plate';
 import {useObjectStore} from "../../../../../store/ObjectStore";
 import {GLTFResultType} from "../../../../../utils/types/GLTFResultType";
+import plate from '~/assets/models/plate.glb?url';
 
 const Plates: React.FC = () => {
-  const plateModel = useGLTF('/assets/models/plate.glb') as GLTFResultType;
+  const plateModel = useGLTF(plate) as GLTFResultType;
   const plates = useObjectStore((state) => state.plates);
 
   return (
@@ -20,7 +21,7 @@ const Plates: React.FC = () => {
   );
 };
 
-useGLTF.preload('/assets/models/plate.glb');
+useGLTF.preload(plate);
 
 export default Plates;
 
