@@ -1,10 +1,10 @@
 import { useFrame } from '@react-three/fiber';
-import React, {useRef} from 'react';
-import { Vector3 } from 'three'
+import React,{ useRef } from 'react';
+import { Vector3 } from 'three';
+import PlayerStore from "../../store/PlayerStore";
 import { RefGroupType } from '../../utils/types/RefTypes';
 import { Cat } from '../Objects/Cat';
-import {ObjectInterface} from "../Objects/Interface/ObjectInterface";
-import PlayerStore from "../../store/PlayerStore";
+import { ObjectInterface } from "../Objects/Interface/ObjectInterface";
 
 export const OtherPlayer = (props: ObjectInterface) => {
   const catRef = useRef<RefGroupType>(null);
@@ -12,10 +12,10 @@ export const OtherPlayer = (props: ObjectInterface) => {
   const catScale = new Vector3(5, 5, 5);
 
   useFrame(() => {
-    if (PlayerStore.getState().userPositions) {
-      const position = PlayerStore.getState().userPositions[props.uuid];
+    if (PlayerStore.getState()) {
+      const position = PlayerStore.getState().userPositions[props.index];
 
-      catRef.current.position.set(position.x, position.y - 0.5, position.z);
+      catRef.current && catRef.current.position.set(position.x, position.y - 0.5, position.z);
     }
   });
 
@@ -23,7 +23,7 @@ export const OtherPlayer = (props: ObjectInterface) => {
     <Cat
       scale={catScale}
       position={zeroVector}
-      index={0}
+      index={props.index}
       isVisible={true}
       ref={catRef}
     />

@@ -5,7 +5,7 @@ type State = {
   users: User[] | null,
   userPositions: {
     [id: string]: UserPosition
-  } | null
+  }
   actions: {
     setOwnerPlayerId: (userId: string | null) => void,
     setUsers: (users: any) => void,
@@ -18,13 +18,15 @@ type User = {
 }
 
 type UserPosition = {
-  position: number[]
+  x: number,
+  y: number,
+  z: number
 }
 
 const usePlayerStore = create<State>((set) => ({
   ownerPlayerId: null,
   users: null,
-  userPositions: null,
+  userPositions: {},
   actions: {
     setOwnerPlayerId: (userId: string | null) => set(() => ({ownerPlayerId: userId})),
     setUsers: (users: any) => set(() => ({users: users})),

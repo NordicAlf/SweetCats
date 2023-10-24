@@ -1,5 +1,5 @@
 import { useGLTF } from '@react-three/drei';
-import React, {useEffect} from 'react';
+import React from 'react';
 import ObjectNames from '../../../../../utils/constants/ObjectNames';
 import { Cake } from '../../../../Objects/Cake';
 import {Vector3} from "three";
@@ -16,6 +16,7 @@ const Cakes: React.FC = () => {
           key={ObjectNames.cake + '_' + item.id}
           index={item.id}
           position={(new Vector3()).fromArray(item.position)}
+          // @ts-ignore
           mesh={cakeModel.scenes[0].children[0]}
           count={cakes.length}
           isVisible={true}

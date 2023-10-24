@@ -143,7 +143,10 @@ export const useGameStore = create(() => {
     })
 
     const storeData = {
-        response: null,
+        response: {
+            status: '',
+            action: ''
+        },
         actions: {
             roomCreate(props: CreateRoomInterface) {
                 websocketClient.send(JSON.stringify({

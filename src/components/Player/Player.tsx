@@ -14,24 +14,24 @@ import Settings from '../../utils/constants/Settings';
 import { RefGroupType } from '../../utils/types/RefTypes';
 import { Cat } from '../Objects/Cat';
 import PauseModal from '../UserInterface/Modal/Pause/PauseModal';
-import { ControlsInterface } from './Interface/ControlsInterface';
 import {ObjectInterface} from "../Objects/Interface/ObjectInterface";
 import {useGameStore} from "../../store/GameStore";
 import useRoomStore from "../../store/RoomStore";
 import {RoomStatusEnum} from "../../utils/enum/RoomStatusEnum";
 import {RoutesList} from "../../core/routes";
 import {useNavigate} from "react-router";
+import {Controls} from "../../utils/enum/ControlsEnum";
 
 const ViewHeightAbovePlayer = 0.02;
 
 export const Player = (props: ObjectInterface) => {
   const rigidBodyRef = useRef<RapierRigidBody>(null);
   const catRef = useRef<RefGroupType>(null);
-  const [, getKeys] = useKeyboardControls();
+  const [, getKeys] = useKeyboardControls<Controls>();
   const { camera } = useThree();
   const rapier = useRapier();
   const [isShowModal, setShowModal] = useState(false);
-  const controlRef = useRef<PointerLockControls>(null);
+  const controlRef = useRef(null);
   const navigate = useNavigate();
   const playerUpdate = useGameStore((gameStore) => gameStore.actions.playerUpdate);
   const roomStatus = useRoomStore((roomStore) => roomStore.roomStatus);
@@ -51,8 +51,8 @@ export const Player = (props: ObjectInterface) => {
   }, [roomStatus])
 
   useFrame((state) => {
-    const controls: ControlsInterface = getKeys();
-    const velocity = rigidBodyRef.current.linvel();
+    const controls = getKeys();
+    const velocity = rigidBodyRef.current!.linvel();
 
     // movement
     frontVector.set(
@@ -76,33 +76,34 @@ export const Player = (props: ObjectInterface) => {
       .applyEuler(state.camera.rotation);
 
     if (!isShowModal) {
-      rigidBodyRef.current.setLinvel({
+      rigidBodyRef.current!.setLinvel({
         x: direction.x,
         y: velocity.y,
         z: direction.z,
-      });
+      }, true);
 
       // jumping
+      // @ts-ignore
       const ray = rapier.world.castRay(
-        new Ray(rigidBodyRef.current.translation(), { x: 0, y: -1, z: 0 })
+        new Ray(rigidBodyRef.current!.translation(), { x: 0, y: -1, z: 0 })
       );
       const grounded = ray && ray.collider && Math.abs(ray.toi) < 0.6;
 
       if (controls.jump && grounded) {
-        rigidBodyRef.current.setLinvel(jumpVector);
+        rigidBodyRef.current!.setLinvel(jumpVector, true);
       }
 
       // if player on the move
       if (!direction.equals(zeroVector) || !grounded) {
         playerUpdate({
-          id: props.uuid,
-          position: rigidBodyRef.current.translation()
+          id: props.index,
+          position: rigidBodyRef.current!.translation()
         });
       }
     }
 
     // update camera
-    const translation = rigidBodyRef.current.translation();
+    const translation = rigidBodyRef.current!.translation();
 
     state.camera.position.set(
       translation.x,
@@ -110,7 +111,7 @@ export const Player = (props: ObjectInterface) => {
       translation.z
     );
 
-    catRef.current.rotation.set(0, state.camera.rotation.y - 1.75, 0);
+    catRef.current!.rotation.set(0, state.camera.rotation.y - 1.75, 0);
 
     // Здесь можно попробовать привязать угол камеры для игроков по оси Y, для передачи с сервера
     // console.log(state.camera.rotation.y - 1.75);
@@ -132,7 +133,7 @@ export const Player = (props: ObjectInterface) => {
         >
           <Cat
             position={new Vector3(0, -0.1, 0)}
-            index={0}
+            index={'0'}
             isVisible={true}
             ref={catRef}
           />

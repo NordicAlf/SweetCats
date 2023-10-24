@@ -15,7 +15,7 @@ const Room: React.FC = () => {
         <House
           position={new Vector3(0, 0 ,0)}
           isVisible={true}
-          index={0}
+          index={'0'}
         />
         <Floor />
         <Table />

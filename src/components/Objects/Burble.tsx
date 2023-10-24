@@ -1,12 +1,12 @@
 import { Sphere } from '@react-three/drei';
-import { useFrame } from '@react-three/fiber';
+import {useFrame} from '@react-three/fiber';
 import React, { useRef, useState } from 'react';
-import { Color, Vector3 } from 'three';
+import {Color, Mesh, Vector3} from 'three';
 import { getRandomFloat } from '../../utils/functions/randomNumberGenerator';
 import { ObjectInterface } from './Interface/ObjectInterface';
 
 export const Burble: React.FC<ObjectInterface> = (props) => {
-  const sphereRef = useRef();
+  const sphereRef = useRef<Mesh>(null);
   const [isVisible, setVisible] = useState(props.isVisible);
   const color = new Color('rgb(255,218,218)');
   let startAnimationTime = 0;
@@ -23,7 +23,9 @@ export const Burble: React.FC<ObjectInterface> = (props) => {
         startAnimationTime = clock.getElapsedTime();
       }
 
-      sphereRef.current.position.lerp(moveDirection, 0.05);
+      if (sphereRef.current) {
+        sphereRef.current.position.lerp(moveDirection, 0.05);
+      }
 
       if (clock.getElapsedTime() - startAnimationTime > 2) {
         setVisible(false);

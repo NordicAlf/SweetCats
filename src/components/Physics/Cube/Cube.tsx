@@ -2,11 +2,11 @@ import { CuboidCollider, RigidBody } from '@react-three/rapier';
 import React from 'react';
 import { PhysicsInterface } from '../PhysicsInterface';
 
-const Cube: React.FC<PhysicsInterface> = ({ position, scale }) => {
+const Cube: React.FC<PhysicsInterface> = (props) => {
   return (
     <RigidBody
-      position={position}
-      scale={scale}
+      position={props.position}
+      scale={props.scale}
       colliders={'cuboid'}
       type={'fixed'}
     >

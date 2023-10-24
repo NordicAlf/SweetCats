@@ -16,17 +16,15 @@ const Players: React.FC = () => {
           key={ownerPlayerId}
           position={playerPosition}
           index={ownerPlayerId}
-          uuid={ownerPlayerId}
           isVisible={true}
         />
       }
 
-      {players && players.map((item, index) => (
+      {players && players.map((item) => (
         item.id !== ownerPlayerId && <OtherPlayer
           key={item.id}
-          uuid={item.id}
           position={playerPosition}
-          index={index}
+          index={item.id}
           isVisible={true}
         />
       ))}

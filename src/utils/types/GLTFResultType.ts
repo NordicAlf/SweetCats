@@ -1,11 +1,15 @@
-import { Mesh, MeshStandardMaterial } from 'three';
 import { GLTF } from 'three-stdlib';
+// export type GLTFResultType = GLTF & {
+//   nodes: {
+//     Pyramid: Mesh;
+//   };
+//   materials: {
+//     ['default']: MeshStandardMaterial;
+//   };
+// };
 
 export type GLTFResultType = GLTF & {
-  nodes: {
-    Pyramid: Mesh;
-  };
-  materials: {
-    ['default']: MeshStandardMaterial;
-  };
+  nodes: any,
+  materials: any
 };
+

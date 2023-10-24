@@ -1,6 +1,7 @@
 import { Text } from '@react-three/drei';
 import React, { useRef } from 'react';
 import { Vector3 } from 'three';
+import {TextType} from "../../../utils/types/RefTypes";
 
 interface MenuTextInterface {
   position: Vector3;
@@ -9,7 +10,7 @@ interface MenuTextInterface {
 }
 
 export const TextMenu: React.FC<MenuTextInterface> = (props) => {
-  const ref = useRef(null);
+  const ref = useRef<TextType>(null);
 
   return (
     <Text
@@ -23,14 +24,18 @@ export const TextMenu: React.FC<MenuTextInterface> = (props) => {
       position={props.position}
       onClick={props.onClick}
       onPointerEnter={() => {
-        ref.current.outlineWidth = 0.05;
-        ref.current.color = '#C8463F';
-        ref.current.outlineColor = '#ffffff';
+        if (ref.current) {
+          ref.current.outlineWidth = 0.05;
+          ref.current.color = '#C8463F';
+          ref.current.outlineColor = '#ffffff';
+        }
       }}
       onPointerLeave={() => {
-        ref.current.outlineWidth = 0;
-        ref.current.color = '#ffffff';
-        ref.current.outlineColor = '#000000';
+        if (ref.current) {
+          ref.current.outlineWidth = 0;
+          ref.current.color = '#ffffff';
+          ref.current.outlineColor = '#000000';
+        }
       }}
     >
       {props.text}

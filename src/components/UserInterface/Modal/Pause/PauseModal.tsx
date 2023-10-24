@@ -20,7 +20,7 @@ const HelpModal: React.FC<ModalInterface> = (props) => {
   const roomExit = useGameStore((gameStore) => gameStore.actions.roomExit);
 
   useFrame(() => {
-    if (props.isShow) {
+    if (props.isShow && modalRef.current) {
       modalRef.current.position
         .copy(camera.position)
         .add(camera.getWorldDirection(rotation).multiplyScalar(1));

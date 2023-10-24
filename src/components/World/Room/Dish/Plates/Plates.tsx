@@ -2,9 +2,10 @@ import { useGLTF } from '@react-three/drei';
 import React from 'react';
 import { Plate } from '../../../../Objects/Plate';
 import {useObjectStore} from "../../../../../store/ObjectStore";
+import {GLTFResultType} from "../../../../../utils/types/GLTFResultType";
 
 const Plates: React.FC = () => {
-  const plateModel = useGLTF('/assets/models/plate.glb');
+  const plateModel = useGLTF('/assets/models/plate.glb') as GLTFResultType;
   const plates = useObjectStore((state) => state.plates);
 
   return (

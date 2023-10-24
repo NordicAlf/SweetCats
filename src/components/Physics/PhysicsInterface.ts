@@ -1,4 +1,6 @@
+import {Vector3} from "three";
+
 export interface PhysicsInterface {
-  position: number[];
-  scale: number[];
+  position?: Vector3;
+  scale: Vector3;
 }
