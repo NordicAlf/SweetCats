@@ -3,13 +3,14 @@ import React, { forwardRef } from 'react';
 import { GLTFResultType } from '../../utils/types/GLTFResultType';
 import { RefGroupType } from '../../utils/types/RefTypes';
 import { ObjectInterface } from './Interface/ObjectInterface';
+import cat from '~/assets/models/cat.glb?url';
 
 export const Cat = forwardRef<RefGroupType, ObjectInterface>(function Cat(
   props,
   ref
 ) {
   const { nodes, materials } = useGLTF(
-    '/assets/models/cat.glb'
+    cat
   ) as GLTFResultType;
 
   return (
@@ -67,4 +68,4 @@ export const Cat = forwardRef<RefGroupType, ObjectInterface>(function Cat(
   );
 });
 
-useGLTF.preload('/assets/models/cat.glb');
+useGLTF.preload(cat);

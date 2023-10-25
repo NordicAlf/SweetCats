@@ -2,10 +2,11 @@ import { useTexture } from '@react-three/drei';
 import { useThree } from '@react-three/fiber';
 import React from 'react';
 import { Color, Mesh, MeshBasicMaterial, SphereGeometry } from 'three';
+import sunset from '~/assets/textures/epic_sunset_skybox.jpg?url';
 
 const Skybox: React.FC = () => {
   const { scene } = useThree();
-  const texture = useTexture('/assets/textures/epic_sunset_skybox.jpg');
+  const texture = useTexture(sunset);
   const color = new Color('#d0d0d0');
 
   const geometry = new SphereGeometry(500, 60, 40).scale(-1, 1, 1);

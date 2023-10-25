@@ -28,6 +28,7 @@
     "zustand": "^4.3.8"
   },
   "devDependencies": {
+    "@rollup/plugin-alias": "^5.0.1",
     "@types/node": "^20.8.7",
     "@types/react": "^18.0.28",
     "@types/react-dom": "^18.0.11",

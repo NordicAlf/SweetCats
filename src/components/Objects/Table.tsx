@@ -3,11 +3,10 @@ import { RigidBody } from '@react-three/rapier';
 import React from 'react';
 import { GLTFResultType } from '../../utils/types/GLTFResultType';
 import { ObjectInterface } from './Interface/ObjectInterface';
+import table from '~/assets/models/table.gltf?url';
 
 export const Table: React.FC<ObjectInterface> = (props) => {
-  const { nodes, materials } = useGLTF(
-    '/assets/models/table.gltf'
-  ) as GLTFResultType;
+  const { nodes, materials } = useGLTF(table) as GLTFResultType;
 
   return (
     <RigidBody
@@ -26,4 +25,4 @@ export const Table: React.FC<ObjectInterface> = (props) => {
   );
 };
 
-useGLTF.preload('/assets/models/table.gltf');
+useGLTF.preload(table);

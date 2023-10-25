@@ -3,11 +3,10 @@ import { RigidBody } from '@react-three/rapier';
 import React from 'react';
 import { GLTFResultType } from '../../utils/types/GLTFResultType';
 import { ObjectInterface } from './Interface/ObjectInterface';
+import chair from '~/assets/models/chair.gltf?url';
 
 const Zabuton: React.FC<ObjectInterface> = (props) => {
-  const { nodes, materials } = useGLTF(
-    '/assets/models/chair.gltf'
-  ) as GLTFResultType;
+  const { nodes, materials } = useGLTF(chair) as GLTFResultType;
   return (
     <RigidBody
       position={props.position}
@@ -29,4 +28,4 @@ const Zabuton: React.FC<ObjectInterface> = (props) => {
 
 export default Zabuton;
 
-useGLTF.preload('/assets/models/chair.gltf');
+useGLTF.preload(chair);

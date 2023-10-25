@@ -1,4 +1,3 @@
-import { useGLTF } from '@react-three/drei';
 import { RigidBody } from '@react-three/rapier';
 import React, { useState } from 'react';
 import ObjectNames from '../../utils/constants/ObjectNames';
@@ -32,5 +31,3 @@ export const Cake = (props: ObjectInterface) => {
     </RigidBody>
   ) : null
 };
-
-useGLTF.preload('/assets/models/cake.glb');

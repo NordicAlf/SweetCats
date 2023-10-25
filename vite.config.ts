@@ -1,12 +1,24 @@
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
-import wasm from 'vite-plugin-wasm';
+import alias from "@rollup/plugin-alias";
+import { resolve } from 'path'
+
+const projectRootDir = resolve(__dirname);
+
+const isDevMode = import.meta
 
 export default defineConfig({
-  base: '/SweetCats/',
-  assetsInclude: ['**/*.gltf/*.glb'],
-  plugins: [wasm(), react()],
-  optimizeDeps: {
-    exclude: ['@babylonjs/havok'],
-  },
+  // base: '/SweetCats/',
+  assetsInclude: ['**/*.gltf', '**/*.glb'],
+  plugins: [
+    alias({
+      entries: [
+        {
+          find: '~',
+          replacement: resolve(projectRootDir, 'src')
+        }
+      ]
+    }),
+    react()
+  ]
 });
