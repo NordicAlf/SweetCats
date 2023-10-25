@@ -74,7 +74,7 @@ export interface UserInterface {
 }
 
 export const useGameStore = create(() => {
-    const websocketClient = new WebSocket('ws://localhost:8000');
+    const websocketClient = new WebSocket('ws://194.87.111.248:8000');
 
     websocketClient.addEventListener('open', () => {
         // websocketClient.send('i am connect to server!');
