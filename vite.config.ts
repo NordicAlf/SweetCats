@@ -5,10 +5,8 @@ import { resolve } from 'path'
 
 const projectRootDir = resolve(__dirname);
 
-const isDevMode = import.meta
-
 export default defineConfig({
-  // base: '/SweetCats/',
+  base: '/SweetCats/',
   assetsInclude: ['**/*.gltf', '**/*.glb'],
   plugins: [
     alias({
