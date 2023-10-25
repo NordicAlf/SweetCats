@@ -1,5 +1,5 @@
 export const RoutesList = {
-  menu: '/',
-  loading: '/load',
-  game: '/game',
+  menu: '/SweetCats/',
+  loading: '/SweetCats/load',
+  game: '/SweetCats/game',
 };
