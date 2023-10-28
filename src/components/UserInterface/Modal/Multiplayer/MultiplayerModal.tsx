@@ -1,5 +1,5 @@
 import { Html } from '@react-three/drei';
-import React, {useEffect, useRef} from 'react';
+import React, {useRef} from 'react';
 import { RefGroupType } from '../../../../utils/types/RefTypes';
 import { ModalInterface } from '../ModalInterface';
 import './styles.css';
@@ -8,7 +8,6 @@ import {ResponseInterface, useGameStore} from "../../../../store/GameStore";
 import {ResponseStatusEnum} from "../../../../utils/enum/ResponseEnum";
 import {RoutesList} from "../../../../core/routes";
 import {useNavigate} from "react-router";
-import useRoomStore from "../../../../store/RoomStore";
 
 const MultiplayerModal: React.FC<ModalInterface> = (props) => {
   const modalRef = useRef<RefGroupType>(null);
@@ -17,21 +16,16 @@ const MultiplayerModal: React.FC<ModalInterface> = (props) => {
   const createRoom = useGameStore((gameStore) => gameStore.actions.roomCreate);
   const joinRoom = useGameStore((gameStore) => gameStore.actions.roomJoin);
   const response = useGameStore<ResponseInterface>((gameStore) => gameStore.response);
-  const roomId = useRoomStore((roomStore) => roomStore.roomId);
 
   const createRoomFunc = (d: any) => {
     createRoom({password: d.password});
+    navigate(RoutesList.loading);
   }
 
   const joinRoomFunc = (d: any) => {
     joinRoom({password: d.password});
+    navigate(RoutesList.loading);
   }
-
-  useEffect(() => {
-    if (roomId) {
-      navigate(RoutesList.loading);
-    }
-  }, [roomId])
 
   return props.isShow ? (
     <group ref={modalRef}>

@@ -9,12 +9,14 @@ import World from './components/World/World';
 import { RoutesList } from './core/routes';
 import './index.css';
 import { KeyboardControl } from './utils/constants/KeyboardControl';
+import FlashMessageModal from "~/components/UserInterface/Modal/FlashMessage/FlashMessageModal";
 
 const App: React.FC = () => {
   const isDevMode = import.meta.env.DEV;
 
   return (
     <KeyboardControls map={KeyboardControl}>
+      <FlashMessageModal />
       <Canvas
         style={{ position: 'absolute', left: 0, top: 0 }}
         camera={{ position: [0, 1, 5] }}

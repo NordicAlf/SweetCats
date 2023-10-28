@@ -4,6 +4,8 @@ import PlayerStore from "./PlayerStore";
 import {Vector} from "@dimforge/rapier3d-compat/math";
 import ObjectStore from "./ObjectStore";
 import RoomStore from "./RoomStore";
+import {ResponseStatusEnum} from "~/utils/enum/ResponseEnum";
+import FlashMessageStore from "~/store/FlashMessageStore";
 
 interface CreateRoomInterface {
     password: string
@@ -24,6 +26,10 @@ export interface PlayerInterface {
 export interface ResponseInterface {
     status: string,
     action: string
+}
+
+export interface ErrorResponseInterface extends ResponseInterface {
+    data: string
 }
 
 export interface RoomResponseInterface extends ResponseInterface {
@@ -74,10 +80,14 @@ export interface UserInterface {
 }
 
 export const useGameStore = create(() => {
-    const websocketClient = new WebSocket('ws://194.87.111.248:8000');
+    const websocketClient = new WebSocket(import.meta.env.DEV ? 'ws://localhost:8000' : 'ws://194.87.111.248:8000');
+
+    websocketClient.addEventListener('error', () => {
+        FlashMessageStore.getState().actions.addMessage('client error', 'Sorry. The server is currently unavailable');
+        console.log('The server is currently unavailable');
+    })
 
     websocketClient.addEventListener('open', () => {
-        // websocketClient.send('i am connect to server!');
         console.log('Connect to server!');
     })
 
@@ -88,18 +98,7 @@ export const useGameStore = create(() => {
     websocketClient.addEventListener('message', (message) => {
         const jsonResponse = JSON.parse(message.data);
 
-        if (jsonResponse.action === RequestActionEnum.RoomCreate) {
-            const responseData: RoomResponseInterface = jsonResponse;
-
-            RoomStore.getState().actions.setRoomId(responseData.data.roomId);
-            RoomStore.getState().actions.setRoomCreatorUserId(responseData.data.roomCreatorUserId);
-            ObjectStore.getState().actions.setPlates(responseData.data.cakes);
-            ObjectStore.getState().actions.setCakes(responseData.data.cakes);
-            PlayerStore.getState().actions.setUsers(responseData.data.users);
-            PlayerStore.getState().actions.setOwnerPlayerId(responseData.data.ownerPlayerId);
-        }
-
-        if (jsonResponse.action === RequestActionEnum.RoomJoin) {
+        if (jsonResponse.action === RequestActionEnum.RoomCreate || jsonResponse.action === RequestActionEnum.RoomJoin) {
             const responseData: RoomResponseInterface = jsonResponse;
 
             RoomStore.getState().actions.setRoomId(responseData.data.roomId);
@@ -139,6 +138,12 @@ export const useGameStore = create(() => {
             const responseData: CakeResponseInterface = jsonResponse;
 
             ObjectStore.getState().actions.setCakes(responseData.data.cakes);
+        }
+
+        if (jsonResponse.status === ResponseStatusEnum.error) {
+            const errorResponse: ErrorResponseInterface = jsonResponse
+
+            FlashMessageStore.getState().actions.addMessage(errorResponse.action, errorResponse.data);
         }
     })
 
