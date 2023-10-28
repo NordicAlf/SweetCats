@@ -11,6 +11,7 @@ import usePlayerStore from "../../../store/PlayerStore";
 import {TextMenu} from "../Menu/TextMenu";
 import useRoomStore from "../../../store/RoomStore";
 import {RoomStatusEnum} from "../../../utils/enum/RoomStatusEnum";
+import useFlashMessageStore from "~/store/FlashMessageStore";
 
 export const LoaderScreen: React.FC = () => {
   const catRef = useRef<RefGroupType>(null);
@@ -23,6 +24,7 @@ export const LoaderScreen: React.FC = () => {
   const roomRun = useGameStore((gameStore) => gameStore.actions.roomRun);
   const [countPlayers, setCountPlayers] = useState(0);
   const [isYouAreCreatorRoom, setYouAreCreatorRoom] = useState(false);
+  const messages = useFlashMessageStore((messageStore) => messageStore.messages);
 
   camera.position.set(0, 0.1, 0.5);
   camera.rotation.set(-0.2, 0, 0);
@@ -50,6 +52,12 @@ export const LoaderScreen: React.FC = () => {
       navigate(RoutesList.game);
     }
   }, [roomStatus])
+
+  useEffect(() => {
+    if (messages.length > 0) {
+      navigate(RoutesList.menu);
+    }
+  }, [messages])
 
   return (
     <group>
