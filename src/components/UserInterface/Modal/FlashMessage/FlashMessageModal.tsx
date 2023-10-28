@@ -28,4 +28,4 @@ const FlashMessageModal: React.FC = () => {
   )
 }
 
-export default FlashMessageModal
+export default FlashMessageModal;

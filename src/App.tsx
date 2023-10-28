@@ -15,44 +15,29 @@ const App: React.FC = () => {
   const isDevMode = import.meta.env.DEV;
 
   return (
-    <>
-      {/*<div id="blocker">*/}
-      {/*  <div id="instructions">*/}
-      {/*    <p style={{fontSize: '36px'}}>*/}
-      {/*      Click to play*/}
-      {/*    </p>*/}
-      {/*    <p>*/}
-      {/*      Move: WASD<br/>*/}
-      {/*      Jump: SPACE<br/>*/}
-      {/*      Look: MOUSE*/}
-      {/*    </p>*/}
-      {/*  </div>*/}
-      {/*</div>*/}
+    <KeyboardControls map={KeyboardControl}>
+      <FlashMessageModal />
+      <Canvas
+        style={{ position: 'absolute', left: 0, top: 0 }}
+        camera={{ position: [0, 1, 5] }}
+        linear={true}
+      >
+        <BrowserRouter>
+          <Routes>
+            <Route path={RoutesList.menu} element={<Menu />} />
+            <Route path={RoutesList.loading} element={<LoaderScreen />} />
+            <Route path={RoutesList.game} element={<World />} />
+          </Routes>
+        </BrowserRouter>
 
-      <KeyboardControls map={KeyboardControl}>
-        <FlashMessageModal />
-        <Canvas
-          style={{ position: 'absolute', left: 0, top: 0 }}
-          camera={{ position: [0, 1, 5] }}
-          linear={true}
-        >
-          <BrowserRouter>
-            <Routes>
-              <Route path={RoutesList.menu} element={<Menu />} />
-              <Route path={RoutesList.loading} element={<LoaderScreen />} />
-              <Route path={RoutesList.game} element={<World />} />
-            </Routes>
-          </BrowserRouter>
-
-          {isDevMode && (
-            <>
-              <Perf position={'top-left'} />
-              {/*<gridHelper args={[100, 50, 50]} />*/}
-            </>
-          )}
-        </Canvas>
-      </KeyboardControls>
-    </>
+        {isDevMode && (
+          <>
+            <Perf position={'top-left'} />
+            {/*<gridHelper args={[100, 50, 50]} />*/}
+          </>
+        )}
+      </Canvas>
+    </KeyboardControls>
   );
 };
 
