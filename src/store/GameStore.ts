@@ -20,7 +20,8 @@ interface ObjectInterface {
 
 export interface PlayerInterface {
     id: string
-    position: Vector
+    position: Vector,
+    rotation: Vector
 }
 
 export interface ResponseInterface {
@@ -183,6 +184,7 @@ export const useGameStore = create(() => {
                     roomId: RoomStore.getState().roomId,
                     userId: props.id,
                     position: props.position,
+                    rotation: props.rotation
                 }));
             },
             objectRemove(objectId: string) {

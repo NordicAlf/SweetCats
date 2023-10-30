@@ -4,7 +4,10 @@ type State = {
   ownerPlayerId: string | null,
   users: User[] | null,
   userPositions: {
-    [id: string]: UserPosition
+    [id: string]: {
+      'position': UserVector,
+      'rotation': UserVector,
+    }
   }
   actions: {
     setOwnerPlayerId: (userId: string | null) => void,
@@ -17,7 +20,7 @@ type User = {
   id: string
 }
 
-type UserPosition = {
+type UserVector = {
   x: number,
   y: number,
   z: number
