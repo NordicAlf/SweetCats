@@ -13,9 +13,10 @@ export const OtherPlayer = (props: ObjectInterface) => {
 
   useFrame(() => {
     if (PlayerStore.getState()) {
-      const position = PlayerStore.getState().userPositions[props.index];
+      const { position, rotation } = PlayerStore.getState().userPositions[props.index];
 
       catRef.current && catRef.current.position.set(position.x, position.y - 0.5, position.z);
+      catRef.current && catRef.current.rotation.set(0, rotation.y, 0);
     }
   });
 

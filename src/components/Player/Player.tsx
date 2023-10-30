@@ -8,7 +8,7 @@ import {
   useRapier,
 } from '@react-three/rapier';
 import React, {useEffect, useRef, useState} from 'react';
-import { Vector3 } from 'three';
+import {Vector3} from 'three';
 import ObjectNames from '../../utils/constants/ObjectNames';
 import Settings from '../../utils/constants/Settings';
 import { RefGroupType } from '../../utils/types/RefTypes';
@@ -40,7 +40,7 @@ export const Player = (props: ObjectInterface) => {
   const frontVector = new Vector3();
   const sideVector = new Vector3();
   const jumpVector = new Vector3(0, Settings.jumpHeight, 0);
-  const zeroVector = new Vector3();
+  const rotationVector = new Vector3();
 
   camera.rotation.order = 'YXZ';
 
@@ -92,14 +92,6 @@ export const Player = (props: ObjectInterface) => {
       if (controls.jump && grounded) {
         rigidBodyRef.current!.setLinvel(jumpVector, true);
       }
-
-      // if player on the move
-      if (!direction.equals(zeroVector) || !grounded) {
-        playerUpdate({
-          id: props.index,
-          position: rigidBodyRef.current!.translation()
-        });
-      }
     }
 
     // update camera
@@ -113,8 +105,16 @@ export const Player = (props: ObjectInterface) => {
 
     catRef.current!.rotation.set(0, state.camera.rotation.y - 1.75, 0);
 
-    // Здесь можно попробовать привязать угол камеры для игроков по оси Y, для передачи с сервера
-    // console.log(state.camera.rotation.y - 1.75);
+    // if player on the move
+    if (!isShowModal) {
+      rotationVector.setFromEuler(catRef.current!.rotation);
+
+      playerUpdate({
+        id: props.index,
+        position: rigidBodyRef.current!.translation(),
+        rotation: rotationVector
+      });
+    }
   });
 
   return (
