@@ -1,14 +1,15 @@
 @import "src/components/UserInterface/Modal/abstractStyles.css";
 
-.modal-flash-parent {
+.game-interface-parent {
     padding: 10px;
     width: 100%;
     height: 100%;
     display: flex;
-    justify-content: flex-end;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
-.modal-flash-message {
+.game-interface-message {
     position: relative;
     max-height: 200px;
 
@@ -20,7 +21,7 @@
     -ms-user-select: none;
 }
 
-.modal-flash-child {
+.game-interface-child {
     margin-bottom: 5px;
     padding: 5px;
     height: 40px;
