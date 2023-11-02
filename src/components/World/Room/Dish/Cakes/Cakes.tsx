@@ -5,6 +5,7 @@ import { Cake } from '../../../../Objects/Cake';
 import {Vector3} from "three";
 import {useObjectStore} from "../../../../../store/ObjectStore";
 import cake from '~/assets/models/cake.glb?url';
+import {getRandomInt} from "~/utils/functions/randomNumberGenerator";
 
 const Cakes: React.FC = () => {
   const cakeModel = useGLTF(cake);
@@ -18,7 +19,7 @@ const Cakes: React.FC = () => {
           index={item.id}
           position={(new Vector3()).fromArray(item.position)}
           // @ts-ignore
-          mesh={cakeModel.scenes[0].children[0]}
+          mesh={cakeModel.scenes[0].children[getRandomInt(0, 10)]}
           count={cakes.length}
           isVisible={true}
         />
