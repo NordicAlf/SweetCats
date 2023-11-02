@@ -1,9 +1,7 @@
 import { Stars } from '@react-three/drei';
 import { useFrame, useThree } from '@react-three/fiber';
 import React, {useRef, useState} from 'react';
-import { useNavigate } from 'react-router';
 import { Euler, Vector3 } from 'three';
-import { RoutesList } from '../../../core/routes';
 import { RefGroupType } from '../../../utils/types/RefTypes';
 import { Cat } from '../../Objects/Cat';
 import House from '../../Objects/House';
@@ -11,13 +9,14 @@ import Skybox from '../../World/Air/Skybox';
 import HelpModal from '../Modal/Help/HelpModal';
 import { TextMenu } from './TextMenu';
 import MultiplayerModal from "../Modal/Multiplayer/MultiplayerModal";
+import useAudioStore from "~/store/AudioStore";
 
 export const Menu: React.FC = () => {
   const { camera } = useThree();
-  const navigate = useNavigate();
   const catRef = useRef<RefGroupType>(null);
   const [isShowHelpModal, setShowHelpModal] = useState(false);
   const [isShowMultiplayerModal, setShowMultiplayerModal] = useState(false);
+  const eatCake = useAudioStore((state) => (state.actions.playEatCake));
 
   camera.position.set(0, 0, 0.5);
   camera.rotation.set(-0.1, 0, 0);
@@ -59,7 +58,7 @@ export const Menu: React.FC = () => {
         text='Single'
         position={new Vector3(0.3, 0.06, 0)}
         onClick={() => {
-          navigate(RoutesList.loading);
+          eatCake(true);
         }}
       />
       <TextMenu
