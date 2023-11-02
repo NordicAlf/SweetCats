@@ -9,14 +9,12 @@ import Skybox from '../../World/Air/Skybox';
 import HelpModal from '../Modal/Help/HelpModal';
 import { TextMenu } from './TextMenu';
 import MultiplayerModal from "../Modal/Multiplayer/MultiplayerModal";
-import useAudioStore from "~/store/AudioStore";
 
 export const Menu: React.FC = () => {
   const { camera } = useThree();
   const catRef = useRef<RefGroupType>(null);
   const [isShowHelpModal, setShowHelpModal] = useState(false);
   const [isShowMultiplayerModal, setShowMultiplayerModal] = useState(false);
-  const eatCake = useAudioStore((state) => (state.actions.playEatCake));
 
   camera.position.set(0, 0, 0.5);
   camera.rotation.set(-0.1, 0, 0);
@@ -55,22 +53,15 @@ export const Menu: React.FC = () => {
         isVisible={true}
       />
       <TextMenu
-        text='Single'
-        position={new Vector3(0.3, 0.06, 0)}
-        onClick={() => {
-          eatCake(true);
-        }}
-      />
-      <TextMenu
-        text='Multiplayer'
-        position={new Vector3(0.3, -0.04, 0)}
+        text='Play'
+        position={new Vector3(0.3, 0.03, 0)}
         onClick={() => {
           setShowMultiplayerModal(true);
         }}
       />
       <TextMenu
         text='Help'
-        position={new Vector3(0.3, -0.14, 0)}
+        position={new Vector3(0.3, -0.07, 0)}
         onClick={() => {
           setShowHelpModal(true);
         }}
