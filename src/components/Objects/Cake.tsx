@@ -4,11 +4,13 @@ import ObjectNames from '../../utils/constants/ObjectNames';
 import { ObjectInterface } from './Interface/ObjectInterface';
 import {useGameStore} from "../../store/GameStore";
 import usePlayerStore from "~/store/PlayerStore";
+import useAudioStore from "~/store/AudioStore";
 
 export const Cake = (props: ObjectInterface) => {
   const [isVisible, setVisible] = useState(true);
   const cakeRemove = useGameStore((gameStore) => gameStore.actions.objectRemove);
   const eatCake = usePlayerStore((playerStore) => playerStore.actions.eatCake);
+  const playEatCakeSound = useAudioStore((state) => (state.actions.playEatCake));
 
   props.position.setY(props.position.y + 0.05);
 
@@ -18,9 +20,10 @@ export const Cake = (props: ObjectInterface) => {
       position={props.position}
       key={props.index}
       onCollisionEnter={() => {
-        setVisible(false);
+        playEatCakeSound(true);
         cakeRemove(props.index);
         eatCake();
+        setVisible(false);
       }}
       name={ObjectNames.cake}
       scale={2}
