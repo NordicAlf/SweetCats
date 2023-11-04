@@ -81,7 +81,7 @@ export interface UserInterface {
 }
 
 export const useGameStore = create(() => {
-    const websocketClient = new WebSocket(import.meta.env.DEV ? 'ws://localhost:8000' : 'ws://194.87.111.248:8000');
+    const websocketClient = new WebSocket(import.meta.env.DEV ? 'ws://localhost:8000' : 'ws://194.87.98.190:8000');
 
     websocketClient.addEventListener('error', () => {
         FlashMessageStore.getState().actions.addMessage('client error', 'Sorry. The server is currently unavailable');
