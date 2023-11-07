@@ -12,6 +12,7 @@ import { KeyboardControl } from './utils/constants/KeyboardControl';
 import GameInterface from "~/components/UserInterface/Game/GameInterface";
 import MainMusicAudio from "~/components/Audio/MainMusicAudio";
 import useAudioStore from "~/store/AudioStore";
+import {isMobile} from "react-device-detect";
 
 const App: React.FC = () => {
   const isDevMode = import.meta.env.DEV;
@@ -24,12 +25,14 @@ const App: React.FC = () => {
         <GameInterface />
         <div className={`fullscreen bg ${isRunApp ? 'ready' : 'notready'} ${isRunApp && 'clicked'}`}>
           <div className="stack">
-            <a href="#" onClick={() => {
-              runApp(true);
-              playMainMusic(true)
-            }}>
-              {!isRunApp && 'click to continue'}
-            </a>
+            {!isMobile ? <a href="#" onClick={() => {
+                runApp(true);
+                playMainMusic(true)
+              }}>
+                {!isRunApp && 'click to continue'}
+              </a>
+              : <b>Mobile devices are not supported.</b>
+            }
           </div>
         </div>
           <Canvas
